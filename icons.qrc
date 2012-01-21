@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/magnifier-zoom-actual.png</file>
+        <file>icons/magnifier-zoom-in.png</file>
+        <file>icons/magnifier-zoom-out.png</file>
+        <file>icons/grid.png</file>
+        <file>icons/grid-snap.png</file>
+        <file>icons/redo.png</file>
+        <file>icons/undo.png</file>
+        <file>icons/arrow.png</file>
+        <file>icons/box.png</file>
+    </qresource>
+</RCC>

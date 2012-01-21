@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>400</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <property name="allowedAreas">
+    <set>Qt::LeftToolBarArea|Qt::RightToolBarArea|Qt::TopToolBarArea</set>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>16</width>
+     <height>16</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="separator"/>
+   <addaction name="actionZoom_In"/>
+   <addaction name="actionZoom_Actual"/>
+   <addaction name="actionZoom_Out"/>
+   <addaction name="separator"/>
+   <addaction name="actionGrid_draw"/>
+   <addaction name="actionGrid_snap"/>
+   <addaction name="separator"/>
+   <addaction name="actionUndo"/>
+   <addaction name="actionRedo"/>
+   <addaction name="separator"/>
+   <addaction name="actionTool_edit"/>
+   <addaction name="actionTool_box"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionZoom_In">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/magnifier-zoom-in.png</normaloff>:/icons/magnifier-zoom-in.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom In</string>
+   </property>
+   <property name="toolTip">
+    <string>Increment zoom</string>
+   </property>
+  </action>
+  <action name="actionZoom_Out">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/magnifier-zoom-out.png</normaloff>:/icons/magnifier-zoom-out.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom Out</string>
+   </property>
+   <property name="toolTip">
+    <string>Decrement zoom</string>
+   </property>
+  </action>
+  <action name="actionZoom_Actual">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/magnifier-zoom-actual.png</normaloff>:/icons/magnifier-zoom-actual.png</iconset>
+   </property>
+   <property name="text">
+    <string>Actual Zoom</string>
+   </property>
+   <property name="toolTip">
+    <string>Set zoom 1:1</string>
+   </property>
+  </action>
+  <action name="actionGrid_draw">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/grid.png</normaloff>:/icons/grid.png</iconset>
+   </property>
+   <property name="text">
+    <string>Draw grid</string>
+   </property>
+   <property name="toolTip">
+    <string>Draw grid</string>
+   </property>
+  </action>
+  <action name="actionGrid_snap">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/grid-snap.png</normaloff>:/icons/grid-snap.png</iconset>
+   </property>
+   <property name="text">
+    <string>Snap to grid</string>
+   </property>
+   <property name="toolTip">
+    <string>Snap to grid</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/undo.png</normaloff>:/icons/undo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="toolTip">
+    <string>Undo last action</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/redo.png</normaloff>:/icons/redo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="toolTip">
+    <string>Redo action</string>
+   </property>
+  </action>
+  <action name="actionTool_edit">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/arrow.png</normaloff>:/icons/arrow.png</iconset>
+   </property>
+   <property name="text">
+    <string>Edit tool</string>
+   </property>
+  </action>
+  <action name="actionTool_box">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/box.png</normaloff>:/icons/box.png</iconset>
+   </property>
+   <property name="text">
+    <string>Box tool</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
+ <connections/>
+</ui>
