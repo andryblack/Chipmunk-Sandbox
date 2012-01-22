@@ -9,5 +9,6 @@
         <file>icons/undo.png</file>
         <file>icons/arrow.png</file>
         <file>icons/box.png</file>
+        <file>icons/circle.png</file>
     </qresource>
 </RCC>

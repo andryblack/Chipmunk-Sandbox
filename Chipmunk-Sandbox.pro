@@ -28,7 +28,10 @@ SOURCES += main.cpp\
     primitives/boxprimitivemarker.cpp \
     commands/movemarkercommand.cpp \
     primitives/rotateprimitivemarker.cpp \
-    commands/rotateprimitivecommand.cpp
+    commands/rotateprimitivecommand.cpp \
+    tools/circletool.cpp \
+    primitives/circleprimitive.cpp \
+    primitives/circleprimitivemarker.cpp
 
 HEADERS  += mainwindow.h \
     canvas.h \
@@ -47,7 +50,10 @@ HEADERS  += mainwindow.h \
     primitives/boxprimitivemarker.h \
     commands/movemarkercommand.h \
     primitives/rotateprimitivemarker.h \
-    commands/rotateprimitivecommand.h
+    commands/rotateprimitivecommand.h \
+    tools/circletool.h \
+    primitives/circleprimitive.h \
+    primitives/circleprimitivemarker.h
 
 FORMS    += mainwindow.ui
 

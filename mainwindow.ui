@@ -61,6 +61,7 @@
    <addaction name="separator"/>
    <addaction name="actionTool_edit"/>
    <addaction name="actionTool_box"/>
+   <addaction name="actionTool_circle"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionZoom_In">
@@ -181,6 +182,21 @@
    </property>
    <property name="text">
     <string>Box tool</string>
+   </property>
+  </action>
+  <action name="actionTool_circle">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/circle.png</normaloff>:/icons/circle.png</iconset>
+   </property>
+   <property name="text">
+    <string>Circle tool</string>
+   </property>
+   <property name="toolTip">
+    <string>Circle tool</string>
    </property>
   </action>
  </widget>

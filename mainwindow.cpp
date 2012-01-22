@@ -67,6 +67,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionTool_edit,SIGNAL(triggered()),m_tools,SLOT(activateEditTool()));
     m_tools_actions.push_back(ui->actionTool_box);
     connect(ui->actionTool_box,SIGNAL(triggered()),m_tools,SLOT(activateBoxTool()));
+    m_tools_actions.push_back(ui->actionTool_circle);
+    connect(ui->actionTool_circle,SIGNAL(triggered()),m_tools,SLOT(activateCircleTool()));
 
     QActionGroup* group = new QActionGroup(this);
     foreach (QAction* a,m_tools_actions) {
@@ -168,6 +170,9 @@ void MainWindow::onToolChanged() {
     switch (m_tools->toolType()) {
         case ToolTypeBox:
             activeTool = ui->actionTool_box;
+            break;
+        case ToolTypeCircle:
+            activeTool = ui->actionTool_circle;
             break;
         case ToolTypeEdit:
             activeTool = ui->actionTool_edit;

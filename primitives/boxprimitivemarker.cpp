@@ -32,8 +32,34 @@ QPointF BoxPrimitiveMarker::transformPoint( const QPointF& pos ) const {
     return p;
 }
 
-bool BoxPrimitiveMarker::isPointInside( const QPointF& p ) const {
-    return PrimitiveMarker::isPointInside(untransformPoint(p));
+bool BoxPrimitiveMarker::isPointInside( const QPointF& _p ) const {
+    if (!visible()) return false;
+    QPointF p = untransformPoint(_p);
+    QPointF pos = position();
+    qreal l = pos.x();
+    qreal r = l;
+    qreal t = pos.y();
+    qreal b = t;
+    PrimitiveMarkerXAlign x_align = xAlign();
+    QSizeF sz = size();
+    if (x_align==PrimitiveMarkerXAlign_Left) {
+        r+=sz.width();
+    } else if (x_align==PrimitiveMarkerXAlign_Right) {
+        l-=sz.width();
+    } else if (x_align==PrimitiveMarkerXAlign_Center) {
+        l-=sz.width()/2;
+        r+=sz.width()/2;
+    }
+    PrimitiveMarkerYAlign y_align = yAlign();
+    if (y_align==PrimitiveMarkerYAlign_Top) {
+        b+=sz.height();
+    } else if (y_align==PrimitiveMarkerYAlign_Bottom) {
+        t-=sz.height();
+    } else if (y_align==PrimitiveMarkerYAlign_Center) {
+        t-=sz.height()/2;
+        b+=sz.height()/2;
+    }
+    return p.x() >= l && p.y() >= t && p.x() <= r && p.y() <= b;
 }
 
 void BoxPrimitiveMarker::move(const QPointF& pos) {

@@ -4,11 +4,13 @@
 #include <QWidget>
 
 class BoxPrimitive;
+class CirclePrimitive;
 class QPainter;
 class Tools;
 class Scene;
 class BoxPrimitiveMarker;
 class RotatePrimitiveMarker;
+class CirclePrimitiveMarker;
 
 class Canvas : public QWidget
 {
@@ -24,6 +26,11 @@ public:
     void Draw(const BoxPrimitiveMarker* marker, QPainter* painter) const;
 
     void Draw(const RotatePrimitiveMarker* marker, QPainter* painter) const;
+
+    void Draw(const CirclePrimitive* circle, QPainter* painter) const;
+    void Draw(const CirclePrimitiveMarker* marker, QPainter* painter) const;
+
+
 
 public slots:
     void setDrawGrid(bool draw);

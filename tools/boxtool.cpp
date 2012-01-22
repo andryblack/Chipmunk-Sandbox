@@ -1,5 +1,4 @@
 #include "boxtool.h"
-#include "../canvas.h"
 #include "../primitives/boxprimitive.h"
 #include "../commands/createprimitivecommand.h"
 #include "../history.h"
@@ -11,7 +10,7 @@ BoxTool::BoxTool(History* history,QObject *parent) :
 
 void BoxTool::Draw(const Canvas* canvas,QPainter* painter) const {
     if (m_primitive)
-        canvas->Draw(m_primitive,painter);
+        m_primitive->Draw(canvas,painter);
 }
 
 bool BoxTool::onMouseMove(const QPointF &pos) {

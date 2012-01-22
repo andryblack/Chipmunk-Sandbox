@@ -8,6 +8,7 @@
 enum ToolType {
     ToolTypeEdit,
     ToolTypeBox,
+    ToolTypeCircle,
     ToolTypesAmount
 };
 
@@ -38,6 +39,7 @@ signals:
     void changed();
 public slots:
     void activateBoxTool();
+    void activateCircleTool();
     void activateEditTool();
 private:
     History*    m_history;

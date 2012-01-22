@@ -20,6 +20,8 @@ public:
 
     QPointF untransformPoint( const QPointF& pos ) const;
     QPointF transformPoint( const QPointF& pos ) const;
+
+    virtual QSizeF size() const = 0;
 signals:
     
 public slots:

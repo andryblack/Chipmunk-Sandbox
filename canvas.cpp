@@ -4,6 +4,8 @@
 #include "tools.h"
 #include "scene.h"
 #include "primitives/rotateprimitivemarker.h"
+#include "primitives/circleprimitive.h"
+#include "primitives/circleprimitivemarker.h"
 
 #include <QPainter>
 #include <QMouseEvent>
@@ -117,12 +119,42 @@ void Canvas::Draw(const BoxPrimitive *box, QPainter* painter) const {
     QRectF r = QRectF(rect.x()*z,rect.y()*z,rect.width()*z,rect.height()*z);
     painter->drawRect(r);
     QPointF c = rect.center()*z;
-    painter->drawLine(c.x(),c.y()-5,c.x(),c.y()+5);
-    painter->drawLine(c.x()-5,c.y(),c.x()+5,c.y());
+    if (r.height()>10)
+        painter->drawLine(c.x(),c.y()-5,c.x(),c.y()+5);
+    if (r.width()>10)
+        painter->drawLine(c.x()-5,c.y(),c.x()+5,c.y());
 
     if (a!=0) {
         painter->restore();
     }
+}
+
+void Canvas::Draw(const CirclePrimitive* circle, QPainter* painter) const {
+    qreal z = zoom();
+    QPointF pos = circle->position() * z;
+    qreal r = circle->r()*z;
+    painter->drawEllipse(pos,r,r);
+    if (r>10) {
+        painter->drawLine(pos.x(),pos.y()-5,pos.x(),pos.y()+5);
+        painter->drawLine(pos.x()-5,pos.y(),pos.x()+5,pos.y());
+    }
+}
+
+void Canvas::Draw(const CirclePrimitiveMarker* marker, QPainter* painter) const {
+    qreal z = zoom();
+    QPointF pos = marker->primitive()->position() * z;
+    qreal r1 = marker->primitive()->r()*z;
+    qreal r2 = r1;
+    if (marker->xAlign()==PrimitiveMarkerXAlign_Right) {
+        r2 = r1 + marker->width()*z;
+    } else if (marker->xAlign()==PrimitiveMarkerXAlign_Left) {
+        r1 = r2 - marker->width()*z;
+    }
+    QPainterPath path1;
+    path1.addEllipse(pos,r1,r1);
+    QPainterPath path2;
+    path2.addEllipse(pos,r2,r2);
+    painter->drawPath(path2.subtracted(path1));
 }
 
 void Canvas::Draw(const BoxPrimitiveMarker *marker, QPainter* painter) const {

@@ -32,15 +32,13 @@ public:
     
     virtual void Draw( const Canvas* canvas , QPainter* painter ) const = 0;
 
-    virtual bool isPointInside( const QPointF& p) const;
+    virtual bool isPointInside( const QPointF& p) const = 0;
     virtual QPointF position() const = 0;
     virtual void move(const QPointF& pos) = 0;
     virtual bool visible() const { return true; }
 
     virtual PrimitiveMarkerXAlign   xAlign() const = 0;
     virtual PrimitiveMarkerYAlign   yAlign() const = 0;
-
-    virtual QSizeF size() const = 0;
 
     virtual void reset() {}
 
