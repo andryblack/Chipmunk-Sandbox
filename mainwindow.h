@@ -13,6 +13,7 @@ class QLabel;
 class Tools;
 class History;
 class Scene;
+class QSettings;
 
 class MainWindow : public QMainWindow
 {
@@ -22,6 +23,11 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     
+protected:
+    void changeEvent(QEvent *e);
+    void closeEvent(QCloseEvent *event);
+    void saveConfig(QSettings& config,const QString& name,const QObject* obj);
+    void readConfig(QSettings& config,const QString& name,QObject* obj);
 protected slots:
     void onCanvasZoomChanged();
     void onHistoryChanged();

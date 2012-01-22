@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include <QScrollArea>
 #include <QLabel>
+#include <QSettings>
+#include <QMetaProperty>
 #include "canvas.h"
 #include "tools.h"
 #include "history.h"
@@ -13,7 +15,14 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QSettings settings;
+    restoreGeometry(settings.value("geometry").toByteArray());
+    ui->actionGrid_draw->setChecked(settings.value("grid_draw").toBool());
+    ui->actionGrid_snap->setChecked(settings.value("grid_snap").toBool());
+
     m_scene = new Scene(this);
+
+    m_scene->setZoom(settings.value("zoom",QVariant(1.0)).toDouble());
 
     m_history = new History(m_scene,this);
 
@@ -38,10 +47,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_scene,SIGNAL(zoomChanged()),this,SLOT(onCanvasZoomChanged()));
     onCanvasZoomChanged();
 
-    ui->actionGrid_draw->setChecked(m_canvas->drawGrid());
+    m_canvas->setDrawGrid(ui->actionGrid_draw->isChecked());
     connect(ui->actionGrid_draw,SIGNAL(toggled(bool)),m_canvas,SLOT(setDrawGrid(bool)));
 
-    ui->actionGrid_snap->setChecked(m_canvas->snapToGrid());
+    m_canvas->setSnapToGrid(ui->actionGrid_snap->isChecked());
     connect(ui->actionGrid_snap,SIGNAL(toggled(bool)),m_canvas,SLOT(setSnapToGrid(bool)));
 
     ui->actionUndo->setEnabled(m_history->undoAvaliable());
@@ -68,6 +77,59 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(m_tools,SIGNAL(changed()),this,SLOT(onToolChanged()));
     onToolChanged();
+}
+
+
+void MainWindow::closeEvent(QCloseEvent *event)
+ {
+     QSettings settings;
+     settings.setValue("geometry", saveGeometry());
+     settings.setValue("grid_draw",ui->actionGrid_draw->isChecked());
+     settings.setValue("grid_snap",ui->actionGrid_snap->isChecked());
+     settings.setValue("zoom",m_scene->zoom());
+     QMainWindow::closeEvent(event);
+ }
+
+void MainWindow::saveConfig(QSettings& settings,
+                             const QString& name,
+                             const QObject* object) {
+    settings.beginGroup(name);
+    const QMetaObject *metaobject = object->metaObject();
+     int count = metaobject->propertyCount();
+     for (int i=0; i<count; ++i) {
+         QMetaProperty metaproperty = metaobject->property(i);
+         const char *name = metaproperty.name();
+         QVariant value = object->property(name);
+         settings.setValue(name,value);
+     }
+    settings.endGroup();
+}
+
+void MainWindow::readConfig(QSettings& settings,
+                             const QString& name,
+                             QObject* object) {
+    settings.beginGroup(name);
+    const QMetaObject *metaobject = object->metaObject();
+     int count = metaobject->propertyCount();
+     for (int i=0; i<count; ++i) {
+         QMetaProperty metaproperty = metaobject->property(i);
+         const char *name = metaproperty.name();
+         if (settings.contains(name))
+             object->setProperty(name,settings.value(name));
+      }
+    settings.endGroup();
+}
+
+void MainWindow::changeEvent(QEvent *e)
+{
+    QMainWindow::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        ui->retranslateUi(this);
+        break;
+    default:
+        break;
+    }
 }
 
 void MainWindow::onCanvasZoomChanged() {
