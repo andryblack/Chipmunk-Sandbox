@@ -3,7 +3,7 @@
 #include "primitives/boxprimitivemarker.h"
 #include "tools.h"
 #include "scene.h"
-
+#include "primitives/rotateprimitivemarker.h"
 
 #include <QPainter>
 #include <QMouseEvent>
@@ -89,6 +89,8 @@ void Canvas::paintEvent(QPaintEvent *) {
     painter.setBrush(QBrush(QColor(255,255,255,64)));
     m_scene->DrawSelected(this,&painter);
 
+    painter.setRenderHint(QPainter::Antialiasing);
+
     painter.setBrush(QBrush(QColor(0,0,0,64)));
     painter.setPen(QColor(255,255,255,128));
     m_scene->DrawMarkers(this,&painter);
@@ -99,16 +101,43 @@ void Canvas::paintEvent(QPaintEvent *) {
 }
 
 void Canvas::Draw(const BoxPrimitive *box, QPainter* painter) const {
-    const QRectF& rect = box->rect();
+
+    qreal a = box->angle();
     qreal z = zoom();
-    QRect r = QRect(rect.x()*z,rect.y()*z,rect.width()*z,rect.height()*z);
+
+    if (a!=0) {
+        QPointF pos = box->position() * z;
+        painter->save();
+        painter->translate(pos);
+        painter->rotate(a * 180.0 / M_PI );
+        painter->translate(-pos);
+    }
+
+    const QRectF& rect = box->rect();
+    QRectF r = QRectF(rect.x()*z,rect.y()*z,rect.width()*z,rect.height()*z);
     painter->drawRect(r);
+    QPointF c = rect.center()*z;
+    painter->drawLine(c.x(),c.y()-5,c.x(),c.y()+5);
+    painter->drawLine(c.x()-5,c.y(),c.x()+5,c.y());
+
+    if (a!=0) {
+        painter->restore();
+    }
 }
 
 void Canvas::Draw(const BoxPrimitiveMarker *marker, QPainter* painter) const {
+    const BoxPrimitive* box = marker->primitive();
+    qreal z = zoom();
+    qreal a = box->angle();
+    if (a!=0) {
+        QPointF pos = marker->position() * z;
+        painter->save();
+        painter->translate(pos);
+        painter->rotate(a * 180.0 / M_PI );
+        painter->translate(-pos);
+    }
     QPointF pos = marker->position();
     QSizeF size = marker->size();
-    qreal z = zoom();
     QRect r = QRect( pos.x()*z, pos.y()*z ,size.width()*z,size.height()*z);
     if (marker->xAlign()==PrimitiveMarkerXAlign_Right)
         r.moveLeft(r.left()-r.width());
@@ -120,8 +149,22 @@ void Canvas::Draw(const BoxPrimitiveMarker *marker, QPainter* painter) const {
         r.moveTop(r.top()-r.height()/2);
 
     painter->drawRect(r);
+
+    if (a!=0) {
+        painter->restore();
+    }
 }
 
+void Canvas::Draw(const RotatePrimitiveMarker* marker, QPainter* painter) const {
+    qreal z = zoom();
+    QPointF pos = marker->position()*z;
+    qreal r = marker->radius() * z;
+    painter->drawEllipse(pos,r,r);
+    if (marker->activated()) {
+        painter->drawLine(pos,marker->startPoint()*z);
+        painter->drawLine(pos,marker->endPoint()*z);
+    }
+}
 
 void Canvas::processPos(QPointF& pos) const {
     pos*=(1.0f/zoom());

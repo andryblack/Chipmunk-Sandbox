@@ -22,5 +22,8 @@ void CreatePrimitiveCommand::Undo(Scene* scene) {
 void CreatePrimitiveCommand::Redo(Scene* scene) {
     scene->appendPrimitive(m_primitive);
     scene->setText(m_primitive->text());
-    scene->setSelected(m_primitive);
+}
+
+QString CreatePrimitiveCommand::text() const {
+    return QString("Create '%1'").arg(m_primitive->name());
 }

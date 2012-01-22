@@ -14,6 +14,8 @@ public:
     virtual void Execute(Scene* scene) = 0;
     virtual void Undo(Scene* scene) = 0;
     virtual void Redo(Scene* scene) = 0;
+
+    virtual QString text() const = 0;
 signals:
     
 public slots:

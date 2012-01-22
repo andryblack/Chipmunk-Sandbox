@@ -16,6 +16,8 @@ public:
     virtual void Execute(Scene* scene) ;
     virtual void Undo(Scene* scene) ;
     virtual void Redo(Scene* scene) ;
+
+    virtual QString text() const;
 private:
     Primitive* m_primitive;
     QPointF m_from;

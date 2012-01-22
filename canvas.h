@@ -8,6 +8,7 @@ class QPainter;
 class Tools;
 class Scene;
 class BoxPrimitiveMarker;
+class RotatePrimitiveMarker;
 
 class Canvas : public QWidget
 {
@@ -21,6 +22,8 @@ public:
 
     void Draw(const BoxPrimitive* box, QPainter* painter) const;
     void Draw(const BoxPrimitiveMarker* marker, QPainter* painter) const;
+
+    void Draw(const RotatePrimitiveMarker* marker, QPainter* painter) const;
 
 public slots:
     void setDrawGrid(bool draw);

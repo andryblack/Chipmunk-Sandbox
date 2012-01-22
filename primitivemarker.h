@@ -8,6 +8,8 @@
 class Primitive;
 class Canvas;
 class QPainter;
+class Command;
+
 
 enum PrimitiveMarkerXAlign {
     PrimitiveMarkerXAlign_Left,
@@ -30,7 +32,7 @@ public:
     
     virtual void Draw( const Canvas* canvas , QPainter* painter ) const = 0;
 
-    bool isPointInside( const QPointF& p) const;
+    virtual bool isPointInside( const QPointF& p) const;
     virtual QPointF position() const = 0;
     virtual void move(const QPointF& pos) = 0;
     virtual bool visible() const { return true; }
@@ -39,12 +41,28 @@ public:
     virtual PrimitiveMarkerYAlign   yAlign() const = 0;
 
     virtual QSizeF size() const = 0;
+
+    virtual void reset() {}
+
+    const QPointF& startPoint() const { return m_start_point; }
+    const QPointF& endPoint() const { return m_end_point; }
+
+    virtual Command* generateCommand() = 0;
 signals:
     
 public slots:
     
 protected:
+    void    setStartPoint( const QPointF& pos ) {
+        m_start_point = pos;
+    }
+    void    setEndPoint( const QPointF& pos ) {
+        m_end_point = pos;
+    }
+
 private:
+    QPointF     m_start_point;
+    QPointF     m_end_point;
 };
 
 #endif // PRIMITIVEMARKER_H

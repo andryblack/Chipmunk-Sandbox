@@ -89,7 +89,11 @@ void MainWindow::onCanvasZoomChanged() {
 
 void MainWindow::onHistoryChanged() {
     ui->actionUndo->setEnabled(m_history->undoAvaliable());
+    ui->actionUndo->setText(m_history->undoText());
+    ui->actionUndo->setToolTip(m_history->undoText());
     ui->actionRedo->setEnabled(m_history->redoAvaliable());
+    ui->actionRedo->setText(m_history->redoText());
+    ui->actionRedo->setToolTip(m_history->redoText());
 }
 
 void MainWindow::onSceneTextChanged() {

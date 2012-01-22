@@ -16,7 +16,9 @@ public:
     ~History();
 
     bool undoAvaliable() const;
+    QString undoText() const;
     bool redoAvaliable() const;
+    QString redoText() const;
 
     void appendCommand( Command* cmd, bool execute );
 

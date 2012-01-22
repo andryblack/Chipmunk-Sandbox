@@ -1,10 +1,63 @@
 #include "boxprimitivemarker.h"
 #include "../canvas.h"
 #include "boxprimitive.h"
+#include "../commands/movemarkercommand.h"
 
 BoxPrimitiveMarker::BoxPrimitiveMarker(BoxPrimitive *primitive, QObject *parent) :
-    PrimitiveMarker(parent), m_primitive(primitive)
+    PrimitiveMarker(parent), m_primitive(primitive), m_activated( false )
 {
+}
+
+QPointF BoxPrimitiveMarker::untransformPoint( const QPointF& pos ) const {
+    QPointF p = pos;
+    if (primitive()->angle()!=0) {
+        QTransform transform;
+        transform.translate(position().x(),position().y());
+        transform.rotateRadians(-primitive()->angle());
+        transform.translate(-position().x(),-position().y());
+        p = transform.map(pos);
+    }
+    return p;
+}
+
+QPointF BoxPrimitiveMarker::transformPoint( const QPointF& pos ) const {
+    QPointF p = pos;
+    if (primitive()->angle()!=0) {
+        QTransform transform;
+        transform.translate(position().x(),position().y());
+        transform.rotateRadians(primitive()->angle());
+        transform.translate(-position().x(),-position().y());
+        p = transform.map(pos);
+    }
+    return p;
+}
+
+bool BoxPrimitiveMarker::isPointInside( const QPointF& p ) const {
+    return PrimitiveMarker::isPointInside(untransformPoint(p));
+}
+
+void BoxPrimitiveMarker::move(const QPointF& pos) {
+    if (!move_impl(primitive()->untransformPoint(pos))) return;
+    if (!m_activated) {
+        m_activated = true;
+        setStartPoint(pos);
+    }
+    setEndPoint(pos);
+}
+
+QPointF BoxPrimitiveMarker::position() const {
+    return primitive()->transformPoint(position_impl());
+}
+
+void BoxPrimitiveMarker::reset() {
+    m_activated = false;
+}
+
+Command* BoxPrimitiveMarker::generateCommand() {
+    if ( m_activated && startPoint()!=endPoint() ) {
+        return new MoveMarkerCommand(primitive(),this,startPoint(),endPoint());
+    }
+    return 0;
 }
 
 qreal   BoxPrimitiveMarker::width() const {
@@ -23,36 +76,36 @@ void BoxPrimitiveMarker::Draw( const Canvas* canvas , QPainter* painter ) const 
     canvas->Draw(this,painter);
 }
 
-QPointF BoxPrimitiveMarkerTL::position() const {
-    return primitive()->position();
+QPointF BoxPrimitiveMarkerTL::position_impl() const {
+    return primitive()->rect().topLeft();
 }
 
-void BoxPrimitiveMarkerTL::move(const QPointF& pos) {
-    primitive()->setTopLeft(pos);
+bool BoxPrimitiveMarkerTL::move_impl(const QPointF& pos) {
+    return primitive()->setTopLeft(pos);
 }
 
-QPointF BoxPrimitiveMarkerTR::position() const {
+QPointF BoxPrimitiveMarkerTR::position_impl() const {
     return primitive()->rect().topRight();
 }
 
-void BoxPrimitiveMarkerTR::move(const QPointF& pos) {
-    primitive()->setTopRight(pos);
+bool BoxPrimitiveMarkerTR::move_impl(const QPointF& pos) {
+    return primitive()->setTopRight(pos);
 }
 
-QPointF BoxPrimitiveMarkerBL::position() const {
+QPointF BoxPrimitiveMarkerBL::position_impl() const {
     return primitive()->rect().bottomLeft();
 }
 
-void BoxPrimitiveMarkerBL::move(const QPointF& pos) {
-    primitive()->setBottomLeft(pos);
+bool BoxPrimitiveMarkerBL::move_impl(const QPointF& pos) {
+    return primitive()->setBottomLeft(pos);
 }
 
-QPointF BoxPrimitiveMarkerBR::position() const {
+QPointF BoxPrimitiveMarkerBR::position_impl() const {
     return primitive()->rect().bottomRight();
 }
 
-void BoxPrimitiveMarkerBR::move(const QPointF& pos) {
-    primitive()->setBottomRight(pos);
+bool BoxPrimitiveMarkerBR::move_impl(const QPointF& pos) {
+    return primitive()->setBottomRight(pos);
 }
 
 bool BoxPrimitiveMarkerR::visible() const {
@@ -64,12 +117,12 @@ QSizeF BoxPrimitiveMarkerR::size() const {
                           QSizeF(width(),primitive()->rect().height());
 }
 
-QPointF BoxPrimitiveMarkerR::position() const {
+QPointF BoxPrimitiveMarkerR::position_impl() const {
     return QPointF(primitive()->rect().right(),primitive()->rect().top()+primitive()->rect().height()/2);
 }
 
-void BoxPrimitiveMarkerR::move(const QPointF& pos) {
-    primitive()->setRight(pos.x());
+bool BoxPrimitiveMarkerR::move_impl(const QPointF& pos) {
+    return primitive()->setRight(pos.x());
 }
 
 bool BoxPrimitiveMarkerL::visible() const {
@@ -81,12 +134,12 @@ QSizeF BoxPrimitiveMarkerL::size() const {
                           QSizeF(width(),primitive()->rect().height());
 }
 
-QPointF BoxPrimitiveMarkerL::position() const {
+QPointF BoxPrimitiveMarkerL::position_impl() const {
     return QPointF(primitive()->rect().left(),primitive()->rect().top()+primitive()->rect().height()/2);
 }
 
-void BoxPrimitiveMarkerL::move(const QPointF& pos) {
-    primitive()->setLeft(pos.x());
+bool BoxPrimitiveMarkerL::move_impl(const QPointF& pos) {
+    return primitive()->setLeft(pos.x());
 }
 
 bool BoxPrimitiveMarkerT::visible() const {
@@ -98,12 +151,12 @@ QSizeF BoxPrimitiveMarkerT::size() const {
                           QSizeF(primitive()->rect().width(),width());
 }
 
-QPointF BoxPrimitiveMarkerT::position() const {
+QPointF BoxPrimitiveMarkerT::position_impl() const {
     return QPointF(primitive()->rect().left()+primitive()->rect().width()/2,primitive()->rect().top());
 }
 
-void BoxPrimitiveMarkerT::move(const QPointF& pos) {
-    primitive()->setTop(pos.y());
+bool BoxPrimitiveMarkerT::move_impl(const QPointF& pos) {
+    return primitive()->setTop(pos.y());
 }
 
 bool BoxPrimitiveMarkerB::visible() const {
@@ -115,10 +168,23 @@ QSizeF BoxPrimitiveMarkerB::size() const {
                           QSizeF(primitive()->rect().width(),width());
 }
 
-QPointF BoxPrimitiveMarkerB::position() const {
+QPointF BoxPrimitiveMarkerB::position_impl() const {
     return QPointF(primitive()->rect().left()+primitive()->rect().width()/2,primitive()->rect().bottom());
 }
 
-void BoxPrimitiveMarkerB::move(const QPointF& pos) {
-    primitive()->setBottom(pos.y());
+bool BoxPrimitiveMarkerB::move_impl(const QPointF& pos) {
+    return primitive()->setBottom(pos.y());
+}
+
+RotateBoxPrimitiveMarker::RotateBoxPrimitiveMarker(BoxPrimitive *primitive, QObject *parent) :
+    RotatePrimitiveMarker(primitive,parent) , m_box(primitive) {
+
+}
+
+qreal   RotateBoxPrimitiveMarker::primitiveAngle() const {
+    return m_box->angle();
+}
+
+void RotateBoxPrimitiveMarker::rotatePrimitive( qreal a )  {
+    m_box->rotate( a );
 }

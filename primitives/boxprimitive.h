@@ -15,20 +15,30 @@ public:
 
     virtual void Draw( const Canvas* canvas , QPainter* painter) const;
 
-    virtual bool isPointInside( const QPointF& p) const;
+    virtual bool isPointInside( const QPointF& pos) const;
     virtual QPointF position() const;
+    virtual QSizeF size() const;
+
     virtual void move( const QPointF& pos );
 
     void setSize( const QSizeF& size );
 
-    void    setTopLeft( const QPointF& pos );
-    void    setTopRight( const QPointF& pos );
-    void    setBottomRight( const QPointF& pos );
-    void    setBottomLeft( const QPointF& pos );
-    void    setRight( qreal r );
-    void    setLeft( qreal l );
-    void    setTop( qreal t );
-    void    setBottom( qreal b );
+    bool    setTopLeft( const QPointF& pos );
+    bool    setTopRight( const QPointF& pos );
+    bool    setBottomRight( const QPointF& pos );
+    bool    setBottomLeft( const QPointF& pos );
+    bool    setRight( qreal r );
+    bool    setLeft( qreal l );
+    bool    setTop( qreal t );
+    bool    setBottom( qreal b );
+
+    qreal   angle() const { return m_angle;}
+    void    rotate( qreal a );
+
+    QPointF untransformPoint( const QPointF& pos ) const;
+    QPointF transformPoint( const QPointF& pos ) const;
+
+protected:
 signals:
     
 public slots:
@@ -36,6 +46,7 @@ public slots:
 private:
     QRectF  m_rect;
     void updateText();
+    qreal   m_angle;
 };
 
 #endif // BOXPRIMITIVE_H

@@ -25,3 +25,7 @@ void MovePrimitiveCommand::Redo(Scene* scene)  {
     scene->setText(m_primitive->text());
     scene->setSelected(m_primitive);
 }
+
+QString MovePrimitiveCommand::text() const {
+    return QString("Move '%1'").arg(m_primitive->name());
+}

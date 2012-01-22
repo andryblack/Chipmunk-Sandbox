@@ -3,7 +3,6 @@
 #include "../scene.h"
 #include "../primitive.h"
 #include "../commands/moveprimitivecommand.h"
-#include "../commands/movemarkercommand.h"
 
 EditTool::EditTool(History* history,QObject *parent) :
     Tool(history,parent)
@@ -27,6 +26,7 @@ bool EditTool::onMousePress( const QPointF& pos ) {
             m_start_pos = marker->position();
             m_offset = m_start_pos - pos;
             m_selected_marker = marker;
+            m_selected_marker->reset();
             m_moved = false;
             return true;
         }
@@ -51,7 +51,6 @@ bool EditTool::onMouseMove(const QPointF &pos) {
     if (m_selected) {
         if ( m_selected_marker ) {
             m_selected_marker->move( pos+m_offset );
-            m_moved = m_selected_marker->position()!=m_start_pos;
         } else {
             m_selected->move( pos+m_offset );
             m_moved = m_selected->position()!=m_start_pos;
@@ -64,12 +63,14 @@ bool EditTool::onMouseMove(const QPointF &pos) {
 
 bool EditTool::onMouseRelease(const QPointF &pos) {
     if (m_selected) {
-        if (m_moved) {
+       {
             if ( m_selected_marker ) {
-                MoveMarkerCommand* cmd = new MoveMarkerCommand(m_selected,m_selected_marker,m_start_pos,pos+m_offset);
-                history()->appendCommand(cmd,true);
+                m_selected_marker->move(pos+m_offset);
+                Command* cmd = m_selected_marker->generateCommand();
+                if (cmd) history()->appendCommand(cmd,true);
+                m_selected_marker->reset();
                 m_selected_marker = 0;
-            } else {
+            } else if ( m_moved ){
                 MovePrimitiveCommand* cmd = new MovePrimitiveCommand(m_selected,m_start_pos,pos+m_offset);
                 history()->appendCommand(cmd,true);
             }

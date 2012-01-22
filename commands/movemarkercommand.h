@@ -21,6 +21,7 @@ public:
     virtual void Undo(Scene* scene) ;
     virtual void Redo(Scene* scene) ;
 
+    virtual QString text() const;
 signals:
     
 public slots:

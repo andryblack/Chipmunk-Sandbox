@@ -23,12 +23,24 @@ bool History::undoAvaliable() const {
     return !m_undo_list.empty();
 }
 
+QString History::undoText() const {
+    if (m_undo_list.empty()) return "Undo";
+    return QString("Undo %1").arg( m_undo_list.back()->text() );
+}
+
 bool History::redoAvaliable() const {
     return !m_redo_list.empty();
 }
 
+QString History::redoText() const {
+    if (m_redo_list.empty()) return "Redo";
+    return QString("Redo %1").arg( m_redo_list.back()->text() );
+}
+
 
 void History::appendCommand( Command* cmd, bool execute ) {
+    /// @todo pack redo to one undo
+    m_redo_list.clear();
     m_undo_list.push_back(cmd);
     cmd->setParent(this);
     if (execute) {

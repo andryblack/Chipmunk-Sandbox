@@ -25,3 +25,7 @@ void MoveMarkerCommand::Redo(Scene* scene)  {
     scene->setText(m_primitive->text());
     scene->setSelected(m_primitive);
 }
+
+QString MoveMarkerCommand::text() const {
+    return QString("Edit '%1'").arg(m_primitive->name());
+}

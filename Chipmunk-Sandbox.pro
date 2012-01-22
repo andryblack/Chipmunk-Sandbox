@@ -26,7 +26,9 @@ SOURCES += main.cpp\
     commands/moveprimitivecommand.cpp \
     primitivemarker.cpp \
     primitives/boxprimitivemarker.cpp \
-    commands/movemarkercommand.cpp
+    commands/movemarkercommand.cpp \
+    primitives/rotateprimitivemarker.cpp \
+    commands/rotateprimitivecommand.cpp
 
 HEADERS  += mainwindow.h \
     canvas.h \
@@ -43,7 +45,9 @@ HEADERS  += mainwindow.h \
     commands/moveprimitivecommand.h \
     primitivemarker.h \
     primitives/boxprimitivemarker.h \
-    commands/movemarkercommand.h
+    commands/movemarkercommand.h \
+    primitives/rotateprimitivemarker.h \
+    commands/rotateprimitivecommand.h
 
 FORMS    += mainwindow.ui
 
