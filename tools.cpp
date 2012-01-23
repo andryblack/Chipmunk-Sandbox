@@ -3,6 +3,7 @@
 #include "tools/edittool.h"
 #include "tools/boxtool.h"
 #include "tools/circletool.h"
+#include "tools/polygontool.h"
 
 #include "history.h"
 
@@ -12,6 +13,7 @@ Tools::Tools(History* history,QObject *parent) :
     m_tools[ToolTypeEdit] = new EditTool(history,this);
     m_tools[ToolTypeBox] = new BoxTool(history,this);
     m_tools[ToolTypeCircle] = new CircleTool(history,this);
+    m_tools[ToolTypePolygon] = new PolygonTool(history,this);
 
     m_active_tool = ToolTypeBox;
 }
@@ -50,6 +52,10 @@ void Tools::activateBoxTool() {
 
 void Tools::activateCircleTool() {
      selectTool(ToolTypeCircle);
+}
+
+void Tools::activatePolygonTool() {
+     selectTool(ToolTypePolygon);
 }
 
 void Tools::activateEditTool() {

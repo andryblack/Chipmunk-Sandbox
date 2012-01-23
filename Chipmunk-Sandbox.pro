@@ -31,7 +31,9 @@ SOURCES += main.cpp\
     commands/rotateprimitivecommand.cpp \
     tools/circletool.cpp \
     primitives/circleprimitive.cpp \
-    primitives/circleprimitivemarker.cpp
+    primitives/circleprimitivemarker.cpp \
+    tools/polygontool.cpp \
+    primitives/polygonprimitive.cpp
 
 HEADERS  += mainwindow.h \
     canvas.h \
@@ -53,7 +55,9 @@ HEADERS  += mainwindow.h \
     commands/rotateprimitivecommand.h \
     tools/circletool.h \
     primitives/circleprimitive.h \
-    primitives/circleprimitivemarker.h
+    primitives/circleprimitivemarker.h \
+    tools/polygontool.h \
+    primitives/polygonprimitive.h
 
 FORMS    += mainwindow.ui
 

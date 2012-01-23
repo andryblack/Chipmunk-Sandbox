@@ -5,6 +5,7 @@
 
 class BoxPrimitive;
 class CirclePrimitive;
+class PolygonPrimitive;
 class QPainter;
 class Tools;
 class Scene;
@@ -30,6 +31,7 @@ public:
     void Draw(const CirclePrimitive* circle, QPainter* painter) const;
     void Draw(const CirclePrimitiveMarker* marker, QPainter* painter) const;
 
+    void Draw(const PolygonPrimitive* polygon, QPainter* painter,bool creating=false) const;
 
 
 public slots:

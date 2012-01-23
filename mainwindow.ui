@@ -62,6 +62,7 @@
    <addaction name="actionTool_edit"/>
    <addaction name="actionTool_box"/>
    <addaction name="actionTool_circle"/>
+   <addaction name="actionTool_polygon"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionZoom_In">
@@ -197,6 +198,21 @@
    </property>
    <property name="toolTip">
     <string>Circle tool</string>
+   </property>
+  </action>
+  <action name="actionTool_polygon">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/polygon.png</normaloff>:/icons/polygon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Polygon tool</string>
+   </property>
+   <property name="toolTip">
+    <string>Polygon tool</string>
    </property>
   </action>
  </widget>

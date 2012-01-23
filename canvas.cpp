@@ -6,6 +6,7 @@
 #include "primitives/rotateprimitivemarker.h"
 #include "primitives/circleprimitive.h"
 #include "primitives/circleprimitivemarker.h"
+#include "primitives/polygonprimitive.h"
 
 #include <QPainter>
 #include <QMouseEvent>
@@ -20,6 +21,7 @@ Canvas::Canvas(Tools* tools,Scene* scene,QWidget *parent) :
     m_gridSize = 10;
     m_snapToGrid = false;
     connect(scene,SIGNAL(zoomChanged()),this,SLOT(onZoomChanged()));
+    setMouseTracking(true);
 }
 
 void Canvas::onZoomChanged() {
@@ -135,6 +137,31 @@ void Canvas::Draw(const CirclePrimitive* circle, QPainter* painter) const {
     qreal r = circle->r()*z;
     painter->drawEllipse(pos,r,r);
     if (r>10) {
+        painter->drawLine(pos.x(),pos.y()-5,pos.x(),pos.y()+5);
+        painter->drawLine(pos.x()-5,pos.y(),pos.x()+5,pos.y());
+    }
+}
+
+void Canvas::Draw(const PolygonPrimitive* polygon, QPainter* painter, bool creating) const {
+    qreal z = zoom();
+    QPointF pos = polygon->position() * z;
+    QSizeF sz = polygon->size()*z;
+
+    QVector<QPointF> points = polygon->points();
+    for (int i=0;i<points.size();i++) {
+        points[i]*=z;
+    }
+
+    if (creating) {
+        painter->drawPolyline(QPolygonF(points));
+        if (polygon->pointsAmount()>1) {
+            painter->drawEllipse(polygon->point(0)*z,polygon->connectWidth()*z,polygon->connectWidth()*z);
+        }
+    } else {
+        painter->drawPolygon(QPolygonF(points));
+    }
+
+    if (sz.width()>10 && sz.height()>10) {
         painter->drawLine(pos.x(),pos.y()-5,pos.x(),pos.y()+5);
         painter->drawLine(pos.x()-5,pos.y(),pos.x()+5,pos.y());
     }
