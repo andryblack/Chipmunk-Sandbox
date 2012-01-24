@@ -22,11 +22,8 @@ public:
 
     virtual QPointF position() const;
     virtual void move(const QPointF& pos);
-    virtual bool visible() const;
 
     virtual bool isPointInside( const QPointF& p) const;
-
-    bool    activated() const { return m_activated; }
 
     virtual void reset();
 
@@ -47,12 +44,13 @@ public slots:
     
 private:
     Primitive*  m_primitive;
-    bool        m_activated;
 
     qreal       m_beginAngle;
     qreal       m_endAngle;
 
     qreal       m_delta_angle;
+
+    bool        m_rotate_activated;
 };
 
 #endif // ROTATEPRIMITIVEMARKER_H

@@ -3,7 +3,7 @@
 #include "circleprimitivemarker.h"
 
 CirclePrimitive::CirclePrimitive(Scene *scene, const QPointF &pos, qreal r, QObject *parent) :
-    Primitive(scene,parent),m_pos(pos),m_r(r)
+    PrimitiveWithStaticMarkers(scene,parent),m_pos(pos),m_r(r)
 {
     setName("Circle");
     addMarker(new CirclePrimitiveMarker(this));

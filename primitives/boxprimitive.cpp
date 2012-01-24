@@ -7,7 +7,7 @@
 #include <cmath>
 
 BoxPrimitive::BoxPrimitive(Scene* scene,const QRectF& rect,QObject *parent) :
-    Primitive(scene,parent), m_rect(rect), m_angle( 0 )
+    PrimitiveWithStaticMarkers(scene,parent), m_rect(rect), m_angle( 0 )
 {
     setName("Box");
 

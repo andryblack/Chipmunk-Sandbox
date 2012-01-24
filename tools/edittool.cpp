@@ -3,6 +3,7 @@
 #include "../scene.h"
 #include "../primitive.h"
 #include "../commands/moveprimitivecommand.h"
+#include "../primitivemarker.h"
 
 EditTool::EditTool(History* history,QObject *parent) :
     Tool(history,parent)
@@ -24,9 +25,9 @@ bool EditTool::onMousePress( const QPointF& pos ) {
         PrimitiveMarker* marker = m_selected->getMarkerAtPoint(pos);
         if (marker) {
             m_start_pos = marker->position();
-            m_offset = m_start_pos - pos;
+            m_offset = marker->getOffset( pos );
             m_selected_marker = marker;
-            m_selected_marker->reset();
+            m_selected_marker->activate();
             m_moved = false;
             return true;
         }
@@ -67,8 +68,8 @@ bool EditTool::onMouseRelease(const QPointF &pos) {
             if ( m_selected_marker ) {
                 m_selected_marker->move(pos+m_offset);
                 Command* cmd = m_selected_marker->generateCommand();
-                if (cmd) history()->appendCommand(cmd,true);
                 m_selected_marker->reset();
+                if (cmd) history()->appendCommand(cmd,true);
                 m_selected_marker = 0;
             } else if ( m_moved ){
                 MovePrimitiveCommand* cmd = new MovePrimitiveCommand(m_selected,m_start_pos,pos+m_offset);

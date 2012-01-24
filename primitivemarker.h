@@ -34,23 +34,32 @@ public:
 
     virtual bool isPointInside( const QPointF& p) const = 0;
     virtual QPointF position() const = 0;
+
+    virtual QPointF getOffset( const QPointF& pos ) const {
+        return position() - pos;
+    }
+
     virtual void move(const QPointF& pos) = 0;
     virtual bool visible() const { return true; }
 
     virtual PrimitiveMarkerXAlign   xAlign() const = 0;
     virtual PrimitiveMarkerYAlign   yAlign() const = 0;
 
-    virtual void reset() {}
+    virtual void reset();
 
     const QPointF& startPoint() const { return m_start_point; }
     const QPointF& endPoint() const { return m_end_point; }
 
     virtual Command* generateCommand() = 0;
+
+    void    activate(  );
+    bool    activated() const { return m_activated; }
 signals:
     
 public slots:
     
 protected:
+
     void    setStartPoint( const QPointF& pos ) {
         m_start_point = pos;
     }
@@ -59,6 +68,7 @@ protected:
     }
 
 private:
+    bool    m_activated;
     QPointF     m_start_point;
     QPointF     m_end_point;
 };

@@ -37,12 +37,10 @@ protected:
     bool haveHeight() const;
 
     virtual void move(const QPointF& pos);
-    virtual void reset();
 
     virtual Command* generateCommand() ;
 private:
     BoxPrimitive*   m_primitive;
-    bool    m_activated;
 };
 
 class BoxPrimitiveMarkerTL : public BoxPrimitiveMarker {
@@ -178,6 +176,7 @@ class RotateBoxPrimitiveMarker : public RotatePrimitiveMarker {
 public:
     RotateBoxPrimitiveMarker( BoxPrimitive* primitive, QObject* parent = 0);
 
+    virtual bool visible() const;
 protected:
     virtual qreal   primitiveAngle() const ;
     virtual void rotatePrimitive( qreal a ) ;

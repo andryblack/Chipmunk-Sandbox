@@ -12,6 +12,7 @@ class Scene;
 class BoxPrimitiveMarker;
 class RotatePrimitiveMarker;
 class CirclePrimitiveMarker;
+class PolygonPrimitiveMarker;
 
 class Canvas : public QWidget
 {
@@ -33,6 +34,7 @@ public:
 
     void Draw(const PolygonPrimitive* polygon, QPainter* painter,bool creating=false) const;
 
+    void Draw(const PolygonPrimitiveMarker* marker, QPainter* painter) const;
 
 public slots:
     void setDrawGrid(bool draw);

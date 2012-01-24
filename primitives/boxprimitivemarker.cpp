@@ -4,7 +4,7 @@
 #include "../commands/movemarkercommand.h"
 
 BoxPrimitiveMarker::BoxPrimitiveMarker(BoxPrimitive *primitive, QObject *parent) :
-    PrimitiveMarker(parent), m_primitive(primitive), m_activated( false )
+    PrimitiveMarker(parent), m_primitive(primitive)
 {
 }
 
@@ -64,10 +64,6 @@ bool BoxPrimitiveMarker::isPointInside( const QPointF& _p ) const {
 
 void BoxPrimitiveMarker::move(const QPointF& pos) {
     if (!move_impl(primitive()->untransformPoint(pos))) return;
-    if (!m_activated) {
-        m_activated = true;
-        setStartPoint(pos);
-    }
     setEndPoint(pos);
 }
 
@@ -75,12 +71,9 @@ QPointF BoxPrimitiveMarker::position() const {
     return primitive()->transformPoint(position_impl());
 }
 
-void BoxPrimitiveMarker::reset() {
-    m_activated = false;
-}
 
 Command* BoxPrimitiveMarker::generateCommand() {
-    if ( m_activated && startPoint()!=endPoint() ) {
+    if ( activated() && startPoint()!=endPoint() ) {
         return new MoveMarkerCommand(primitive(),this,startPoint(),endPoint());
     }
     return 0;
@@ -213,4 +206,9 @@ qreal   RotateBoxPrimitiveMarker::primitiveAngle() const {
 
 void RotateBoxPrimitiveMarker::rotatePrimitive( qreal a )  {
     m_box->rotate( a );
+}
+
+bool RotateBoxPrimitiveMarker::visible() const {
+    const QSizeF sz = m_box->size();
+    return sz.width() > radius() * 2 && sz.height() > radius() * 2;
 }

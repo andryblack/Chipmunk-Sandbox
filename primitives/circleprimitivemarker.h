@@ -24,6 +24,7 @@ public:
     const CirclePrimitive* primitive() const { return m_primitive;}
 
     void    move( const QPointF& pos );
+    virtual QPointF getOffset( const QPointF& pos ) const;
 
     Command*    generateCommand();
 signals:

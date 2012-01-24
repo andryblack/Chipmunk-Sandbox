@@ -1,9 +1,9 @@
 #ifndef CIRCLEPRIMITIVE_H
 #define CIRCLEPRIMITIVE_H
 
-#include "../primitive.h"
+#include "primitivewithstaticmarkers.h"
 
-class CirclePrimitive : public Primitive
+class CirclePrimitive : public PrimitiveWithStaticMarkers
 {
     Q_OBJECT
 public:
@@ -17,7 +17,7 @@ public:
     virtual bool isPointInside( const QPointF& pos) const;
     virtual QPointF position() const { return m_pos; }
     virtual void move( const QPointF& pos );
-    virtual QSizeF size() const { return QSizeF(m_r*2,m_r*2); }
+
 signals:
     
 public slots:

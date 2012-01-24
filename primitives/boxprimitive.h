@@ -1,11 +1,11 @@
 #ifndef BOXPRIMITIVE_H
 #define BOXPRIMITIVE_H
 
-#include "../primitive.h"
+#include "primitivewithstaticmarkers.h"
 
 #include <QRectF>
 
-class BoxPrimitive : public Primitive
+class BoxPrimitive : public PrimitiveWithStaticMarkers
 {
     Q_OBJECT
 public:

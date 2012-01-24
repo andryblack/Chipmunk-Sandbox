@@ -7,6 +7,7 @@
 #include "primitives/circleprimitive.h"
 #include "primitives/circleprimitivemarker.h"
 #include "primitives/polygonprimitive.h"
+#include "primitives/polygonprimitivemarker.h"
 
 #include <QPainter>
 #include <QMouseEvent>
@@ -167,6 +168,12 @@ void Canvas::Draw(const PolygonPrimitive* polygon, QPainter* painter, bool creat
     }
 }
 
+void Canvas::Draw(const PolygonPrimitiveMarker* marker, QPainter* painter) const {
+    qreal z = zoom();
+    QPointF pos = marker->position() * z;
+    painter->drawEllipse(pos,marker->width()*z,marker->width()*z);
+}
+
 void Canvas::Draw(const CirclePrimitiveMarker* marker, QPainter* painter) const {
     qreal z = zoom();
     QPointF pos = marker->primitive()->position() * z;
@@ -219,6 +226,7 @@ void Canvas::Draw(const RotatePrimitiveMarker* marker, QPainter* painter) const 
     QPointF pos = marker->position()*z;
     qreal r = marker->radius() * z;
     painter->drawEllipse(pos,r,r);
+
     if (marker->activated()) {
         painter->drawLine(pos,marker->startPoint()*z);
         painter->drawLine(pos,marker->endPoint()*z);

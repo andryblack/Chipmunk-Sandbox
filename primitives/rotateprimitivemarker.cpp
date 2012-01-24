@@ -8,7 +8,7 @@
 RotatePrimitiveMarker::RotatePrimitiveMarker(Primitive *primitive, QObject *parent) :
     PrimitiveMarker(parent), m_primitive( primitive )
 {
-    m_activated = false;
+    m_rotate_activated = false;
 }
 
 
@@ -29,17 +29,14 @@ QPointF RotatePrimitiveMarker::position() const {
     return m_primitive->position();
 }
 
-void RotatePrimitiveMarker::reset() {
-    m_activated = false;
-}
 
 void RotatePrimitiveMarker::move(const QPointF& pos) {
     const QPointF delta =  (position()-pos);
     bool inside =  delta.x() * delta.x() + delta.y()*delta.y() <= radius() * radius();
     if (inside) {
 
-    } else if (!m_activated) {
-        m_activated = true;
+    } else if (!m_rotate_activated) {
+        m_rotate_activated = true;
         setStartPoint( pos );
         setEndPoint( pos );
         m_beginAngle = m_endAngle = primitiveAngle();
@@ -52,13 +49,13 @@ void RotatePrimitiveMarker::move(const QPointF& pos) {
     }
 }
 
-bool RotatePrimitiveMarker::visible() const {
-    const QSizeF sz = m_primitive->size();
-    return sz.width() > radius() * 2 && sz.height() > radius() * 2;
+void RotatePrimitiveMarker::reset() {
+    m_rotate_activated = false;
+    PrimitiveMarker::reset();
 }
 
 Command* RotatePrimitiveMarker::generateCommand() {
-    if (m_activated) {
+    if (activated() && m_rotate_activated) {
         if (m_beginAngle!=m_endAngle) {
             return new RotatePrimitiveCommand(m_primitive,this,m_beginAngle,m_endAngle);
         }

@@ -22,6 +22,16 @@ void    CirclePrimitiveMarker::move( const QPointF& pos ) {
     QPointF delta = pos - m_primitive->position();
     qreal len = sqrt( delta.x()*delta.x() + delta.y()*delta.y() );
     m_primitive->setR( len );
+    QPointF ePos = m_primitive->position() + QPointF(m_primitive->r(),0);
+    setEndPoint(ePos);
+}
+
+QPointF CirclePrimitiveMarker::getOffset( const QPointF& pos ) const {
+    QPointF delta = pos - m_primitive->position();
+    qreal len = sqrt( delta.x()*delta.x() + delta.y()*delta.y() );
+    qreal r = m_primitive->r();
+    delta = delta * r / len - delta;
+    return delta;
 }
 
 bool CirclePrimitiveMarker::CirclePrimitiveMarker::isPointInside( const QPointF& p) const {
