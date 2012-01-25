@@ -9,7 +9,7 @@ class CircleTool : public Tool
 {
     Q_OBJECT
 public:
-    explicit CircleTool(History* history,QObject *parent = 0);
+    explicit CircleTool(Scene* scene,QObject *parent = 0);
     
     virtual void Draw(const Canvas* canvas,QPainter* painter) const;
 

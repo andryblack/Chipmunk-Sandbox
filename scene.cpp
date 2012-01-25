@@ -1,8 +1,10 @@
 #include "scene.h"
 #include "primitive.h"
+#include "command.h"
+#include "history.h"
 
-Scene::Scene(QObject *parent) :
-    QObject(parent), m_zoom(1.0)
+Scene::Scene(History *history, QObject *parent) :
+    QObject(parent), m_history(history), m_zoom(1.0)
 {
     m_zoom = 1.0f;
     m_worldSize = QSize(1024,768);
@@ -101,4 +103,19 @@ Primitive* Scene::selected() const {
 
 void Scene::update() {
     emit changed();
+}
+
+void Scene::execCommand( Command* cmd ) {
+    if (cmd) {
+        cmd->Execute(this);
+        m_history->appendCommand(cmd);
+    }
+}
+
+void Scene::undo() {
+    m_history->undo( this );
+}
+
+void Scene::redo() {
+    m_history->redo( this );
 }

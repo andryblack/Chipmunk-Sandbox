@@ -1,11 +1,11 @@
 #include "polygontool.h"
-#include "../history.h"
+#include "../scene.h"
 #include "../primitives/polygonprimitive.h"
 #include "../commands/createprimitivecommand.h"
 #include "../canvas.h"
 
-PolygonTool::PolygonTool(History *history, QObject *parent) :
-    Tool(history,parent),m_primitive(0)
+PolygonTool::PolygonTool(Scene *scene, QObject *parent) :
+    Tool(scene,parent),m_primitive(0)
 {
 }
 
@@ -44,7 +44,7 @@ bool PolygonTool::onMousePress( const QPointF& pos ) {
 bool PolygonTool::onMouseRelease( const QPointF& pos ) {
     if (m_primitive) {
         m_primitive->moveLastPoint(pos);
-        history()->setText(m_primitive->text());
+        scene()->setText(m_primitive->text());
         return true;
     }
     return false;
@@ -53,7 +53,7 @@ bool PolygonTool::onMouseRelease( const QPointF& pos ) {
 bool PolygonTool::onMouseMove( const QPointF& pos ) {
     if (Tool::onMouseMove(pos)) {
         m_primitive->moveLastPoint(pos);
-        history()->setText(m_primitive->text());
+        scene()->setText(m_primitive->text());
         return true;
     }
     return false;
@@ -63,7 +63,7 @@ bool PolygonTool::beginCreating(const QPointF &pos) {
     Tool::beginCreating(pos);
     if (m_primitive)
         return false;
-    m_primitive = new PolygonPrimitive( history()->scene(), pos );
+    m_primitive = new PolygonPrimitive( scene(), pos );
     return true;
 }
 
@@ -74,7 +74,7 @@ void PolygonTool::endCreating(const QPointF &pos) {
         if (m_primitive->pointsAmount()>2) {
             CreatePrimitiveCommand* cmd = new CreatePrimitiveCommand(m_primitive);
             m_primitive = 0;
-            history()->appendCommand(cmd,true);
+            scene()->execCommand(cmd);
         } else {
             delete m_primitive;
             m_primitive = 0;

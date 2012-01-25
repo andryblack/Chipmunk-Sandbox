@@ -17,13 +17,12 @@ class Tool;
 class Canvas;
 class QPainter;
 class Scene;
-class History;
 
 class Tools : public QObject
 {
     Q_OBJECT
 public:
-    explicit Tools(History* history,QObject *parent = 0);
+    explicit Tools(Scene* scene,QObject *parent = 0);
     
     ToolType toolType() const;
     void selectTool( ToolType type );
@@ -44,7 +43,7 @@ public slots:
     void activatePolygonTool();
     void activateEditTool();
 private:
-    History*    m_history;
+    Scene*    m_scene;
     ToolType    m_active_tool;
     std::tr1::array<Tool*,ToolTypesAmount>  m_tools;
 };

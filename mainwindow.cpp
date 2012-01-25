@@ -20,13 +20,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionGrid_draw->setChecked(settings.value("grid_draw").toBool());
     ui->actionGrid_snap->setChecked(settings.value("grid_snap").toBool());
 
-    m_scene = new Scene(this);
+    m_history = new History(this);
+
+    m_scene = new Scene(m_history,this);
 
     m_scene->setZoom(settings.value("zoom",QVariant(1.0)).toDouble());
 
-    m_history = new History(m_scene,this);
 
-    m_tools = new Tools(m_history,this);
+    m_tools = new Tools(m_scene,this);
 
     QScrollArea* scroll = new QScrollArea();
     scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -58,8 +59,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(m_history,SIGNAL(changed()),this,SLOT(onHistoryChanged()));
 
-    connect(ui->actionUndo,SIGNAL(triggered()),m_history,SLOT(undo()));
-    connect(ui->actionRedo,SIGNAL(triggered()),m_history,SLOT(redo()));
+    connect(ui->actionUndo,SIGNAL(triggered()),m_scene,SLOT(undo()));
+    connect(ui->actionRedo,SIGNAL(triggered()),m_scene,SLOT(redo()));
 
     connect(m_scene,SIGNAL(changed()),m_canvas,SLOT(repaint()));
 

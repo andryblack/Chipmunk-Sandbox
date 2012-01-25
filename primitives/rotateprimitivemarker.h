@@ -27,8 +27,7 @@ public:
 
     virtual void reset();
 
-    virtual Command* generateCommand();
-
+    virtual void complete();
 
     virtual void rotatePrimitive( qreal a ) = 0;
 protected:

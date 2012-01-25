@@ -2,6 +2,7 @@
 #include "../canvas.h"
 #include "boxprimitive.h"
 #include "../commands/movemarkercommand.h"
+#include "../scene.h"
 
 BoxPrimitiveMarker::BoxPrimitiveMarker(BoxPrimitive *primitive, QObject *parent) :
     PrimitiveMarker(parent), m_primitive(primitive)
@@ -72,11 +73,13 @@ QPointF BoxPrimitiveMarker::position() const {
 }
 
 
-Command* BoxPrimitiveMarker::generateCommand() {
+void BoxPrimitiveMarker::complete() {
     if ( activated() && startPoint()!=endPoint() ) {
-        return new MoveMarkerCommand(primitive(),this,startPoint(),endPoint());
+        m_primitive->scene()->execCommand( new MoveMarkerCommand(primitive(),this,startPoint(),endPoint()) );
+        PrimitiveMarker::complete();
+    } else {
+        reset();
     }
-    return 0;
 }
 
 qreal   BoxPrimitiveMarker::width() const {

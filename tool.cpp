@@ -1,9 +1,8 @@
 #include "tool.h"
-#include "history.h"
 #include "scene.h"
 
-Tool::Tool(History* history,QObject *parent) :
-    QObject(parent) , m_history(history)
+Tool::Tool(Scene* scene,QObject *parent) :
+    QObject(parent) , m_scene(scene)
 {
     m_creating = false;
 }
@@ -13,7 +12,7 @@ void Tool::Draw(const Canvas* ,QPainter* ) const {
 }
 
 void Tool::Activate() {
-    m_history->scene()->clearSelection();
+    scene()->clearSelection();
 }
 
 

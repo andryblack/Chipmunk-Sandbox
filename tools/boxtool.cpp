@@ -1,10 +1,10 @@
 #include "boxtool.h"
 #include "../primitives/boxprimitive.h"
 #include "../commands/createprimitivecommand.h"
-#include "../history.h"
+#include "../scene.h"
 
-BoxTool::BoxTool(History* history,QObject *parent) :
-    Tool(history,parent), m_primitive(0)
+BoxTool::BoxTool(Scene *scene,QObject *parent) :
+    Tool(scene,parent), m_primitive(0)
 {
 }
 
@@ -24,7 +24,7 @@ bool BoxTool::onMouseMove(const QPointF &pos) {
             m_primitive->setBottom(pos.y());
         else
             m_primitive->setTop(pos.y());
-        history()->setText(m_primitive->text());
+        scene()->setText(m_primitive->text());
         return true;
     }
     return false;
@@ -40,7 +40,7 @@ bool BoxTool::beginCreating(const QPointF &pos) {
     if (m_primitive)
         delete m_primitive;
     m_primitive = 0;
-    m_primitive = new BoxPrimitive( history()->scene(),rect );
+    m_primitive = new BoxPrimitive( scene(),rect );
     return true;
 }
 
@@ -68,6 +68,5 @@ void BoxTool::endCreating(const QPointF &pos) {
 
     CreatePrimitiveCommand* cmd = new CreatePrimitiveCommand(m_primitive);
     m_primitive = 0;
-    history()->appendCommand(cmd,true);
-
+    scene()->execCommand(cmd);
 }

@@ -10,7 +10,7 @@ class EditTool : public Tool
 {
     Q_OBJECT
 public:
-    explicit EditTool(History* history,QObject *parent = 0);
+    explicit EditTool(Scene* scene,QObject *parent = 0);
     
     virtual void Activate();
     virtual bool onMousePress( const QPointF& pos );

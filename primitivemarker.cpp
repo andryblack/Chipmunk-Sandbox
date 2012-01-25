@@ -21,4 +21,6 @@ void PrimitiveMarker::reset() {
     m_activated = false;
 }
 
-
+void PrimitiveMarker::complete() {
+    m_activated = false;
+}

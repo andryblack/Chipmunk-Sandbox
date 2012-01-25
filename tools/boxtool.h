@@ -10,7 +10,7 @@ class BoxTool : public Tool
 {
     Q_OBJECT
 public:
-    explicit BoxTool(History* history,QObject *parent = 0);
+    explicit BoxTool(Scene* scene,QObject *parent = 0);
     
     virtual void Draw(const Canvas* canvas,QPainter* painter) const;
 

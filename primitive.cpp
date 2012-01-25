@@ -8,6 +8,10 @@ Primitive::Primitive(Scene* scene,QObject *parent) :
 {
 }
 
+Scene*  Primitive::scene() {
+    return m_scene;
+}
+
 qreal   Primitive::sceneZoom() const {
     return m_scene->zoom();
 }

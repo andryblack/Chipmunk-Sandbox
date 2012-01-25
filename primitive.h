@@ -17,6 +17,7 @@ class Primitive : public QObject
 public:
     explicit Primitive(Scene* scene,QObject *parent = 0);
 
+    Scene*  scene();
     qreal   sceneZoom() const;
 
     virtual void Draw( const Canvas* canvas , QPainter* painter ) const = 0;

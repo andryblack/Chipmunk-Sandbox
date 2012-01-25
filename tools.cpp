@@ -5,15 +5,15 @@
 #include "tools/circletool.h"
 #include "tools/polygontool.h"
 
-#include "history.h"
+#include "scene.h"
 
-Tools::Tools(History* history,QObject *parent) :
-    QObject(parent), m_history(history)
+Tools::Tools(Scene *scene,QObject *parent) :
+    QObject(parent), m_scene(scene)
 {
-    m_tools[ToolTypeEdit] = new EditTool(history,this);
-    m_tools[ToolTypeBox] = new BoxTool(history,this);
-    m_tools[ToolTypeCircle] = new CircleTool(history,this);
-    m_tools[ToolTypePolygon] = new PolygonTool(history,this);
+    m_tools[ToolTypeEdit] = new EditTool(scene,this);
+    m_tools[ToolTypeBox] = new BoxTool(scene,this);
+    m_tools[ToolTypeCircle] = new CircleTool(scene,this);
+    m_tools[ToolTypePolygon] = new PolygonTool(scene,this);
 
     m_active_tool = ToolTypeBox;
 }
@@ -65,7 +65,7 @@ void Tools::activateEditTool() {
 void Tools::selectTool( ToolType type ) {
     if (m_active_tool!=type) {
         m_active_tool = type;
-        m_history->setText("");
+        m_scene->setText("");
         ActiveTool()->Activate();
         emit changed();
     }

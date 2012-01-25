@@ -50,7 +50,7 @@ public:
     const QPointF& startPoint() const { return m_start_point; }
     const QPointF& endPoint() const { return m_end_point; }
 
-    virtual Command* generateCommand() = 0;
+    virtual void complete();
 
     void    activate(  );
     bool    activated() const { return m_activated; }

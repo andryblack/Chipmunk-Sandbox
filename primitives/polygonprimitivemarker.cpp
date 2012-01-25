@@ -3,6 +3,7 @@
 #include "../canvas.h"
 #include <cmath>
 #include "../commands/movemarkercommand.h"
+#include "../scene.h"
 
 PolygonPrimitiveMarker::PolygonPrimitiveMarker(PolygonPrimitive *primitive,int index, QObject *parent) :
     PrimitiveMarker(parent), m_primitive( primitive ),m_index(index)
@@ -32,11 +33,14 @@ void PolygonPrimitiveMarker::move(const QPointF& pos) {
     setEndPoint(pos);
 }
 
-Command* PolygonPrimitiveMarker::generateCommand() {
+void PolygonPrimitiveMarker::complete() {
     if (!activated()) {
-        return 0;
+        return;
     }
-    if (startPoint()==endPoint())
-        return 0;
-    return new MoveMarkerCommand(m_primitive,this,startPoint(),endPoint());
+    if (startPoint()==endPoint()) {
+        reset();
+        return;
+    }
+    m_primitive->scene()->execCommand( new MoveMarkerCommand(m_primitive,this,startPoint(),endPoint()) );
+    PrimitiveMarker::complete();
 }

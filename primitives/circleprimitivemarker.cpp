@@ -2,7 +2,7 @@
 #include "circleprimitive.h"
 #include "../canvas.h"
 #include "../commands/movemarkercommand.h"
-
+#include "../scene.h"
 #include <cmath>
 
 CirclePrimitiveMarker::CirclePrimitiveMarker(CirclePrimitive *primitive, QObject *parent) :
@@ -54,9 +54,11 @@ bool CirclePrimitiveMarker::haveWidth() const {
     return primitive()->r() > width() * 3;
 }
 
-Command*    CirclePrimitiveMarker::generateCommand() {
+void    CirclePrimitiveMarker::complete() {
     if (startPoint()!=endPoint() ) {
-        return new MoveMarkerCommand(m_primitive,this,startPoint(),endPoint());
+        m_primitive->scene()->execCommand( new MoveMarkerCommand(m_primitive,this,startPoint(),endPoint()));
+        PrimitiveMarker::complete();
+    } else {
+        reset();
     }
-    return 0;
 }

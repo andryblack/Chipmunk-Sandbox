@@ -26,7 +26,7 @@ public:
     void    move( const QPointF& pos );
     virtual QPointF getOffset( const QPointF& pos ) const;
 
-    Command*    generateCommand();
+    void    complete();
 signals:
     
 public slots:

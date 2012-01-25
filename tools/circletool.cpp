@@ -1,12 +1,12 @@
 #include "circletool.h"
 #include "../primitives/circleprimitive.h"
 #include "../commands/createprimitivecommand.h"
-#include "../history.h"
+#include "../scene.h"
 
 #include <cmath>
 
-CircleTool::CircleTool(History *history, QObject *parent) :
-    Tool(history,parent),m_primitive(0)
+CircleTool::CircleTool(Scene *scene, QObject *parent) :
+    Tool(scene,parent),m_primitive(0)
 {
 }
 
@@ -21,7 +21,7 @@ bool CircleTool::onMouseMove( const QPointF& pos ) {
         QPointF size = pos-beginPos();
         qreal r = sqrt(size.x()*size.x()+size.y()*size.y());
         m_primitive->setR( r );
-        history()->setText(m_primitive->text());
+        scene()->setText(m_primitive->text());
         return true;
     }
 }
@@ -31,7 +31,7 @@ bool CircleTool::beginCreating(const QPointF &pos) {
     if (m_primitive)
         delete m_primitive;
     m_primitive = 0;
-    m_primitive = new CirclePrimitive( history()->scene(), pos, 5.0 );
+    m_primitive = new CirclePrimitive( scene(), pos, 5.0 );
     return true;
 }
 
@@ -48,6 +48,6 @@ void CircleTool::endCreating(const QPointF &pos) {
 
     CreatePrimitiveCommand* cmd = new CreatePrimitiveCommand(m_primitive);
     m_primitive = 0;
-    history()->appendCommand(cmd,true);
+    scene()->execCommand(cmd);
 
 }

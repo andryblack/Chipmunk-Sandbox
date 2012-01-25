@@ -2,7 +2,7 @@
 #include "../canvas.h"
 #include "../primitive.h"
 #include "../commands/rotateprimitivecommand.h"
-
+#include "../scene.h"
 #include <cmath>
 
 RotatePrimitiveMarker::RotatePrimitiveMarker(Primitive *primitive, QObject *parent) :
@@ -54,11 +54,13 @@ void RotatePrimitiveMarker::reset() {
     PrimitiveMarker::reset();
 }
 
-Command* RotatePrimitiveMarker::generateCommand() {
+void RotatePrimitiveMarker::complete() {
     if (activated() && m_rotate_activated) {
         if (m_beginAngle!=m_endAngle) {
-            return new RotatePrimitiveCommand(m_primitive,this,m_beginAngle,m_endAngle);
+            m_primitive->scene()->execCommand( new RotatePrimitiveCommand(m_primitive,this,m_beginAngle,m_endAngle) );
+            PrimitiveMarker::complete();
+            return;
         }
     }
-    return 0;
+    reset();
 }

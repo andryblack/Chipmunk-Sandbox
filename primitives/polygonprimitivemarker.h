@@ -22,7 +22,7 @@ public:
 
     virtual qreal width() const;
 
-    virtual Command* generateCommand();
+    virtual void complete();
 signals:
     
 public slots:

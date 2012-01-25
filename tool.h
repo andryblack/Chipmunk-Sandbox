@@ -6,13 +6,13 @@
 
 class Canvas;
 class QPainter;
-class History;
+class Scene;
 
 class Tool : public QObject
 {
     Q_OBJECT
 public:
-    explicit Tool(History* history,QObject *parent = 0);
+    explicit Tool(Scene* history,QObject *parent = 0);
     
     virtual void Activate();
 
@@ -29,12 +29,12 @@ signals:
 public slots:
 
 protected:
-    History* history() { return m_history;}
+    Scene* scene() { return m_scene;}
     virtual bool beginCreating( const QPointF& pos );
     const QPointF& beginPos() const { return m_begin_pos;}
     virtual void endCreating( const QPointF& pos );
 private:
-    History*    m_history;
+    Scene*    m_scene;
     bool    m_creating;
     QPointF m_begin_pos;
 };

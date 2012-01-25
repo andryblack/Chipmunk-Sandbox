@@ -10,12 +10,14 @@
 class Primitive;
 class Canvas;
 class QPainter;
+class Command;
+class History;
 
 class Scene : public QObject
 {
     Q_OBJECT
 public:
-    explicit Scene(QObject *parent = 0);
+    explicit Scene(History* history,QObject *parent = 0);
     
     void Draw( const Canvas* canvas, QPainter* painter) const;
     void DrawSelected( const Canvas* canvas, QPainter* painter) const;
@@ -44,6 +46,8 @@ public:
     const  QString& text() const { return m_text;}
     void   setText( const QString& text );
 
+    void execCommand( Command* cmd );
+
 signals:
     void zoomChanged();
     void textChanged();
@@ -55,8 +59,11 @@ public slots:
     void decrementZoom();
     void actualZoom();
 
-    
+    void undo();
+    void redo();
+
 private:
+    History*    m_history;
     QList<Primitive*> m_free_primtives;
     QList<Primitive*> m_selected;
 

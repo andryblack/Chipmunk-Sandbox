@@ -9,7 +9,7 @@ class PolygonTool : public Tool
 {
     Q_OBJECT
 public:
-    explicit PolygonTool(History* history,QObject *parent = 0);
+    explicit PolygonTool(Scene* scene,QObject *parent = 0);
     
     virtual void Draw(const Canvas* canvas,QPainter* painter) const;
 
