@@ -29,10 +29,16 @@ public:
 
     virtual PrimitiveMarker* getMarkerAtPoint( const QPointF& pos );
 
+    PolygonPrimitiveMarker* getCornerMarkerAtPoint( const QPointF& pos,int andNot  );
+    PolygonPrimitiveMarker* getNearCornerMarkerAtPoint( const QPointF& pos,int index  );
+
     void    addPoint( const QPointF& pos );
     void    moveLastPoint( const QPointF& pos );
     void    movePoint( int index, const QPointF& pos );
     void    removeLast();
+
+    void    removePoint( int index );
+    void    addPoint( int index, const QPointF& pos);
 signals:
     
 public slots:

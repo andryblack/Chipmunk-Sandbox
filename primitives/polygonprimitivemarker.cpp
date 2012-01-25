@@ -3,6 +3,7 @@
 #include "../canvas.h"
 #include <cmath>
 #include "../commands/movepolygonmarkercommand.h"
+#include "../commands/removepolygonpointcommand.h"
 #include "../scene.h"
 
 PolygonPrimitiveMarker::PolygonPrimitiveMarker(PolygonPrimitive *primitive,int index, QObject *parent) :
@@ -41,6 +42,11 @@ void PolygonPrimitiveMarker::complete(Scene *scene) {
         reset();
         return;
     }
-    scene->execCommand( new MovePolygonMarkerCommand(m_primitive,m_index,startPoint(),endPoint()) );
+    PolygonPrimitiveMarker* m = m_primitive->getNearCornerMarkerAtPoint(endPoint(),m_index);
     PrimitiveMarker::complete(scene);
+    if (m && m_primitive->points().size()>3) {
+        scene->execCommand( new RemovePolygonPointCommand(m_primitive,m_index,startPoint()));
+    } else {
+        scene->execCommand( new MovePolygonMarkerCommand(m_primitive,m_index,startPoint(),endPoint()) );
+    }
 }

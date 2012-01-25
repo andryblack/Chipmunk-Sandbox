@@ -11,6 +11,8 @@ class PolygonPrimitiveMarker : public PrimitiveMarker
 public:
     explicit PolygonPrimitiveMarker(PolygonPrimitive* primitive,int index,QObject *parent = 0);
     
+    void setIndex(int indx) { m_index = indx; }
+
     void Draw( const Canvas* canvas , QPainter* painter ) const;
 
     virtual PrimitiveMarkerXAlign   xAlign() const { return PrimitiveMarkerXAlign_Center; }
