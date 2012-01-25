@@ -1,6 +1,8 @@
 #include "polygonprimitive.h"
 #include "../canvas.h"
 #include "polygonprimitivemarker.h"
+#include "../scene.h"
+#include "../commands/createpolygonpointcommand.h"
 #include <cmath>
 
 PolygonPrimitive::PolygonPrimitive(Scene *scene,const QPointF& pos,QObject *parent) :
@@ -69,6 +71,28 @@ PrimitiveMarker* PolygonPrimitive::getMarkerAtPoint(const QPointF &pos) {
     PrimitiveMarker* p = getCornerMarkerAtPoint(pos,-1);
     if (p)
         return p;
+
+    if (m_points.size()>1) {
+        QPointF prev = m_points.back();
+        qreal w = 5.0 / sceneZoom();
+        for (int i=0;i<m_points.size();i++) {
+            QPointF d = m_points[i] - prev;
+            qreal l = sqrt( d.x()*d.x() + d.y() * d.y() );
+            l-=m_corner_markers[i]->width() * 2;
+            if (l>w*3) {
+                QPointF splitPos = (m_points[i]+prev)/2;
+                d = splitPos - pos;
+                l = sqrt( d.x()*d.x() + d.y() * d.y() );
+                if (l<w) {
+                    int indx = i;
+                    scene()->execCommand( new CreatePolygonPointCommand(this,indx,splitPos));
+                    return getCornerMarkerAtPoint(pos,-1);
+                }
+            }
+            prev = m_points[i];
+        }
+    }
+
     return 0;
 }
 

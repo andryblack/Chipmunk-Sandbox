@@ -37,7 +37,8 @@ SOURCES += main.cpp\
     primitives/polygonprimitivemarker.cpp \
     primitives/primitivewithstaticmarkers.cpp \
     commands/movepolygonmarkercommand.cpp \
-    commands/removepolygonpointcommand.cpp
+    commands/removepolygonpointcommand.cpp \
+    commands/createpolygonpointcommand.cpp
 
 HEADERS  += mainwindow.h \
     canvas.h \
@@ -65,7 +66,8 @@ HEADERS  += mainwindow.h \
     primitives/polygonprimitivemarker.h \
     primitives/primitivewithstaticmarkers.h \
     commands/movepolygonmarkercommand.h \
-    commands/removepolygonpointcommand.h
+    commands/removepolygonpointcommand.h \
+    commands/createpolygonpointcommand.h
 
 FORMS    += mainwindow.ui
 
