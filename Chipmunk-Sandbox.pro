@@ -35,7 +35,8 @@ SOURCES += main.cpp\
     tools/polygontool.cpp \
     primitives/polygonprimitive.cpp \
     primitives/polygonprimitivemarker.cpp \
-    primitives/primitivewithstaticmarkers.cpp
+    primitives/primitivewithstaticmarkers.cpp \
+    commands/movepolygonmarkercommand.cpp
 
 HEADERS  += mainwindow.h \
     canvas.h \
@@ -61,7 +62,8 @@ HEADERS  += mainwindow.h \
     tools/polygontool.h \
     primitives/polygonprimitive.h \
     primitives/polygonprimitivemarker.h \
-    primitives/primitivewithstaticmarkers.h
+    primitives/primitivewithstaticmarkers.h \
+    commands/movepolygonmarkercommand.h
 
 FORMS    += mainwindow.ui
 

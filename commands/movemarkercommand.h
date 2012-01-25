@@ -15,7 +15,8 @@ public:
     explicit MoveMarkerCommand(Primitive* p,
                                PrimitiveMarker* m,
                                const QPointF& from,
-                               const QPointF& to,QObject *parent = 0);
+                               const QPointF& to,
+                               QObject *parent = 0);
     
     virtual void Execute(Scene* scene) ;
     virtual void Undo(Scene* scene) ;

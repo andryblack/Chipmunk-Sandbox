@@ -22,7 +22,7 @@ public:
 
     virtual qreal width() const;
 
-    virtual void complete();
+    virtual void complete(Scene* scene);
 signals:
     
 public slots:

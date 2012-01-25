@@ -65,7 +65,7 @@ bool EditTool::onMouseRelease(const QPointF &pos) {
        {
             if ( m_selected_marker ) {
                 m_selected_marker->move(pos+m_offset);
-                m_selected_marker->complete();
+                m_selected_marker->complete(scene());
                 m_selected_marker = 0;
             } else if ( m_moved ){
                 MovePrimitiveCommand* cmd = new MovePrimitiveCommand(m_selected,m_start_pos,pos+m_offset);

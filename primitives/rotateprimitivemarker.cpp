@@ -54,11 +54,11 @@ void RotatePrimitiveMarker::reset() {
     PrimitiveMarker::reset();
 }
 
-void RotatePrimitiveMarker::complete() {
+void RotatePrimitiveMarker::complete(Scene *scene) {
     if (activated() && m_rotate_activated) {
         if (m_beginAngle!=m_endAngle) {
-            m_primitive->scene()->execCommand( new RotatePrimitiveCommand(m_primitive,this,m_beginAngle,m_endAngle) );
-            PrimitiveMarker::complete();
+            scene->execCommand( new RotatePrimitiveCommand(m_primitive,this,m_beginAngle,m_endAngle) );
+            PrimitiveMarker::complete(scene);
             return;
         }
     }

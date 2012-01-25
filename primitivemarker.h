@@ -5,11 +5,9 @@
 #include <QPointF>
 #include <QSizeF>
 
-class Primitive;
 class Canvas;
 class QPainter;
-class Command;
-
+class Scene;
 
 enum PrimitiveMarkerXAlign {
     PrimitiveMarkerXAlign_Left,
@@ -50,7 +48,7 @@ public:
     const QPointF& startPoint() const { return m_start_point; }
     const QPointF& endPoint() const { return m_end_point; }
 
-    virtual void complete();
+    virtual void complete(Scene* scene);
 
     void    activate(  );
     bool    activated() const { return m_activated; }

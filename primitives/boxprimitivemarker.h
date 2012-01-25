@@ -14,7 +14,7 @@ public:
     
     virtual void Draw( const Canvas* canvas , QPainter* painter ) const;
     virtual QPointF position( ) const;
-    virtual void complete();
+    virtual void complete(Scene* scene);
 
     virtual bool isPointInside( const QPointF& p) const;
     const BoxPrimitive* primitive() const { return m_primitive;}

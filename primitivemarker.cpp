@@ -21,6 +21,6 @@ void PrimitiveMarker::reset() {
     m_activated = false;
 }
 
-void PrimitiveMarker::complete() {
+void PrimitiveMarker::complete(Scene *scene) {
     m_activated = false;
 }

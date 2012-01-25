@@ -27,7 +27,7 @@ public:
 
     virtual void reset();
 
-    virtual void complete();
+    virtual void complete(Scene* scene);
 
     virtual void rotatePrimitive( qreal a ) = 0;
 protected:

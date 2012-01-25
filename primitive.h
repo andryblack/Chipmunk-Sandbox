@@ -17,7 +17,6 @@ class Primitive : public QObject
 public:
     explicit Primitive(Scene* scene,QObject *parent = 0);
 
-    Scene*  scene();
     qreal   sceneZoom() const;
 
     virtual void Draw( const Canvas* canvas , QPainter* painter ) const = 0;
@@ -38,6 +37,7 @@ signals:
 public slots:
     
 protected:
+    Scene*  scene();
     void setText( const QString& t ) { m_text = t; }
     void setName( const QString& name ) { m_name = name; }
 private:

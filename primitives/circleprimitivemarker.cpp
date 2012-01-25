@@ -54,10 +54,10 @@ bool CirclePrimitiveMarker::haveWidth() const {
     return primitive()->r() > width() * 3;
 }
 
-void    CirclePrimitiveMarker::complete() {
+void    CirclePrimitiveMarker::complete(Scene *scene) {
     if (startPoint()!=endPoint() ) {
-        m_primitive->scene()->execCommand( new MoveMarkerCommand(m_primitive,this,startPoint(),endPoint()));
-        PrimitiveMarker::complete();
+        scene->execCommand( new MoveMarkerCommand(m_primitive,this,startPoint(),endPoint()));
+        PrimitiveMarker::complete(scene);
     } else {
         reset();
     }

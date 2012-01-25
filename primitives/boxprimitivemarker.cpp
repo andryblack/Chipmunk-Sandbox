@@ -73,10 +73,10 @@ QPointF BoxPrimitiveMarker::position() const {
 }
 
 
-void BoxPrimitiveMarker::complete() {
+void BoxPrimitiveMarker::complete(Scene *scene) {
     if ( activated() && startPoint()!=endPoint() ) {
-        m_primitive->scene()->execCommand( new MoveMarkerCommand(primitive(),this,startPoint(),endPoint()) );
-        PrimitiveMarker::complete();
+        scene->execCommand( new MoveMarkerCommand(primitive(),this,startPoint(),endPoint()) );
+        PrimitiveMarker::complete(scene);
     } else {
         reset();
     }
