@@ -38,7 +38,10 @@ SOURCES += main.cpp\
     primitives/primitivewithstaticmarkers.cpp \
     commands/movepolygonmarkercommand.cpp \
     commands/removepolygonpointcommand.cpp \
-    commands/createpolygonpointcommand.cpp
+    commands/createpolygonpointcommand.cpp \
+    scenetreemodel.cpp \
+    scenetreeitem.cpp \
+    body.cpp
 
 HEADERS  += mainwindow.h \
     canvas.h \
@@ -67,7 +70,10 @@ HEADERS  += mainwindow.h \
     primitives/primitivewithstaticmarkers.h \
     commands/movepolygonmarkercommand.h \
     commands/removepolygonpointcommand.h \
-    commands/createpolygonpointcommand.h
+    commands/createpolygonpointcommand.h \
+    scenetreemodel.h \
+    scenetreeitem.h \
+    body.h
 
 FORMS    += mainwindow.ui
 

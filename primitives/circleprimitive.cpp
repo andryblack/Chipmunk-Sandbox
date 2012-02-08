@@ -2,8 +2,8 @@
 #include "../canvas.h"
 #include "circleprimitivemarker.h"
 
-CirclePrimitive::CirclePrimitive(Scene *scene, const QPointF &pos, qreal r, QObject *parent) :
-    PrimitiveWithStaticMarkers(scene,parent),m_pos(pos),m_r(r)
+CirclePrimitive::CirclePrimitive(Body *body, const QPointF &pos, qreal r, QObject *parent) :
+    PrimitiveWithStaticMarkers(body,parent),m_pos(pos),m_r(r)
 {
     setName("Circle");
     addMarker(new CirclePrimitiveMarker(this));

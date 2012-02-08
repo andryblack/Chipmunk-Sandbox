@@ -7,7 +7,7 @@ class PrimitiveWithStaticMarkers : public Primitive
 {
     Q_OBJECT
 public:
-    explicit PrimitiveWithStaticMarkers(Scene* scene,QObject *parent = 0);
+    explicit PrimitiveWithStaticMarkers(Body* body,QObject *parent = 0);
     
     virtual void DrawMarkers( const Canvas* canvas, QPainter* painter ) const;
 

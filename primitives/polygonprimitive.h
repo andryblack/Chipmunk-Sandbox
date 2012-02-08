@@ -11,7 +11,7 @@ class PolygonPrimitive : public Primitive
 {
     Q_OBJECT
 public:
-    explicit PolygonPrimitive(Scene *scene,const QPointF& pos,QObject *parent = 0);
+    explicit PolygonPrimitive(Body *body,const QPointF& pos,QObject *parent = 0);
     
     virtual void Draw( const Canvas* canvas , QPainter* painter) const;
     virtual void DrawMarkers( const Canvas* canvas, QPainter* painter ) const;
@@ -39,6 +39,8 @@ public:
 
     void    removePoint( int index );
     void    addPoint( int index, const QPointF& pos);
+
+    virtual QString iconFile() const { return ":/icons/polygon.png"; }
 signals:
     
 public slots:

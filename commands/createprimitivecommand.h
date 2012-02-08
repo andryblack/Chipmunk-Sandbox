@@ -4,12 +4,13 @@
 #include "../command.h"
 
 class Primitive;
+class Body;
 
 class CreatePrimitiveCommand : public Command
 {
     Q_OBJECT
 public:
-    CreatePrimitiveCommand(Primitive* p,QObject* parent = 0);
+    CreatePrimitiveCommand(Body* body,Primitive* p,QObject* parent = 0);
 
     virtual void Execute(Scene* scene) ;
     virtual void Undo(Scene* scene) ;
@@ -17,6 +18,7 @@ public:
 
     virtual QString text() const;
 private:
+    Body*       m_body;
     Primitive*  m_primitive;
 };
 

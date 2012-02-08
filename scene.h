@@ -8,6 +8,7 @@
 #include <QString>
 
 class Primitive;
+class Body;
 class Canvas;
 class QPainter;
 class Command;
@@ -23,8 +24,6 @@ public:
     void DrawSelected( const Canvas* canvas, QPainter* painter) const;
     void DrawMarkers( const Canvas* canvas, QPainter* painter) const;
 
-    void appendPrimitive(Primitive* p);
-    void removePrimitive(Primitive* p);
 
     Primitive* getPrimitiveAtPoint(const QPointF& p);
 
@@ -48,11 +47,18 @@ public:
 
     void execCommand( Command* cmd );
 
+    int bodysCount() const;
+    Body* body(int indx);
+
+    Body* staticBody();
+
+    void addBody( Body* b );
 signals:
     void zoomChanged();
     void textChanged();
 
     void changed();
+    void selectionChanged();
 
 public slots:
     void incrementZoom();
@@ -62,15 +68,20 @@ public slots:
     void undo();
     void redo();
 
+protected slots:
+    void bodyChanged();
 private:
     History*    m_history;
-    QList<Primitive*> m_free_primtives;
+
     QList<Primitive*> m_selected;
 
     QSizeF       m_worldSize;
     qreal       m_zoom;
 
     QString m_text;
+
+    QList<Body*>    m_bodys;
+    Body*   m_static_body;
 };
 
 #endif // SCENE_H

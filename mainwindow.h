@@ -8,12 +8,12 @@ namespace Ui {
 class MainWindow;
 }
 
-class Canvas;
 class QLabel;
 class Tools;
 class History;
 class Scene;
 class QSettings;
+class SceneTreeModel;
 
 class MainWindow : public QMainWindow
 {
@@ -32,15 +32,17 @@ protected slots:
     void onCanvasZoomChanged();
     void onHistoryChanged();
     void onToolChanged();
+    void onSceneChanged();
     void onSceneTextChanged();
+    void onSceneSelectionChanged();
 private:
     Ui::MainWindow *ui;
     Tools*  m_tools;
-    Canvas* m_canvas;
     QLabel* m_zoom_status;
     Scene*  m_scene;
     History*    m_history;
     QVector<QAction*> m_tools_actions;
+    SceneTreeModel* m_scene_model;
 };
 
 #endif // MAINWINDOW_H

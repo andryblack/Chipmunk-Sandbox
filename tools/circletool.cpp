@@ -24,6 +24,7 @@ bool CircleTool::onMouseMove( const QPointF& pos ) {
         scene()->setText(m_primitive->text());
         return true;
     }
+    return false;
 }
 
 bool CircleTool::beginCreating(const QPointF &pos) {
@@ -31,7 +32,7 @@ bool CircleTool::beginCreating(const QPointF &pos) {
     if (m_primitive)
         delete m_primitive;
     m_primitive = 0;
-    m_primitive = new CirclePrimitive( scene(), pos, 5.0 );
+    m_primitive = new CirclePrimitive( scene()->staticBody(), pos, 5.0 );
     return true;
 }
 
@@ -46,7 +47,7 @@ void CircleTool::endCreating(const QPointF &pos) {
         return;
     }
 
-    CreatePrimitiveCommand* cmd = new CreatePrimitiveCommand(m_primitive);
+    CreatePrimitiveCommand* cmd = new CreatePrimitiveCommand(scene()->staticBody(),m_primitive);
     m_primitive = 0;
     scene()->execCommand(cmd);
 

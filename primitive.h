@@ -6,16 +6,19 @@
 #include <QVector>
 #include <QString>
 
+#include "scenetreeitem.h"
+
 class Canvas;
 class QPainter;
-class Scene;
+class Body;
 class PrimitiveMarker;
 
-class Primitive : public QObject
+class Primitive : public SceneTreeItem
 {
     Q_OBJECT
 public:
-    explicit Primitive(Scene* scene,QObject *parent = 0);
+    explicit Primitive(Body* scene,QObject *parent = 0);
+    Body*  body();
 
     qreal   sceneZoom() const;
 
@@ -31,17 +34,21 @@ public:
 
     const QString&  text() const { return m_text; }
 
-    const QString& name() const { return m_name; }
+    QString name() const { return m_name; }
+
+    virtual int childCount() const;
+    virtual SceneTreeItem* child(int indx);
+    virtual int indexOf(SceneTreeItem* child);
+    virtual SceneTreeItem* parent() const;
 signals:
     
 public slots:
     
 protected:
-    Scene*  scene();
     void setText( const QString& t ) { m_text = t; }
     void setName( const QString& name ) { m_name = name; }
 private:
-    Scene*  m_scene;
+    Body*  m_body;
     QString m_text;
     QString m_name;
 };

@@ -9,7 +9,7 @@ class BoxPrimitive : public PrimitiveWithStaticMarkers
 {
     Q_OBJECT
 public:
-    explicit BoxPrimitive(Scene *scene,const QRectF &rect , QObject *parent= 0);
+    explicit BoxPrimitive(Body *body,const QRectF &rect , QObject *parent= 0);
     
     const QRectF& rect() const { return m_rect; }
 
@@ -38,6 +38,7 @@ public:
     QPointF untransformPoint( const QPointF& pos ) const;
     QPointF transformPoint( const QPointF& pos ) const;
 
+    virtual QString iconFile() const { return ":/icons/box.png"; }
 protected:
 signals:
     

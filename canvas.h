@@ -18,7 +18,9 @@ class Canvas : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Canvas(Tools* tools,Scene* scene,QWidget *parent = 0);
+    explicit Canvas(QWidget *parent = 0);
+
+    void init(Tools* tools,Scene* scene);
     
     bool drawGrid() const;
     bool snapToGrid() const;

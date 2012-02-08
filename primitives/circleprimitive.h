@@ -7,7 +7,7 @@ class CirclePrimitive : public PrimitiveWithStaticMarkers
 {
     Q_OBJECT
 public:
-    explicit CirclePrimitive(Scene *scene,const QPointF& pos,qreal r,QObject *parent = 0);
+    explicit CirclePrimitive(Body *body,const QPointF& pos,qreal r,QObject *parent = 0);
     
     virtual void Draw( const Canvas* canvas , QPainter* painter) const;
 
@@ -18,6 +18,7 @@ public:
     virtual QPointF position() const { return m_pos; }
     virtual void move( const QPointF& pos );
 
+    virtual QString iconFile() const { return ":/icons/circle.png"; }
 signals:
     
 public slots:

@@ -1,12 +1,12 @@
 #include "polygonprimitive.h"
 #include "../canvas.h"
 #include "polygonprimitivemarker.h"
-#include "../scene.h"
+#include "../body.h"
 #include "../commands/createpolygonpointcommand.h"
 #include <cmath>
 
-PolygonPrimitive::PolygonPrimitive(Scene *scene,const QPointF& pos,QObject *parent) :
-    Primitive(scene,parent)
+PolygonPrimitive::PolygonPrimitive(Body *body,const QPointF& pos,QObject *parent) :
+    Primitive(body,parent)
 {
     setName("Polygon");
     addPoint(pos);
@@ -85,7 +85,7 @@ PrimitiveMarker* PolygonPrimitive::getMarkerAtPoint(const QPointF &pos) {
                 l = sqrt( d.x()*d.x() + d.y() * d.y() );
                 if (l<w) {
                     int indx = i;
-                    scene()->execCommand( new CreatePolygonPointCommand(this,indx,splitPos));
+                    body()->execCommand( new CreatePolygonPointCommand(this,indx,splitPos));
                     return getCornerMarkerAtPoint(pos,-1);
                 }
             }

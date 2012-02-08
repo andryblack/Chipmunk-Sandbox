@@ -63,7 +63,7 @@ bool PolygonTool::beginCreating(const QPointF &pos) {
     Tool::beginCreating(pos);
     if (m_primitive)
         return false;
-    m_primitive = new PolygonPrimitive( scene(), pos );
+    m_primitive = new PolygonPrimitive( scene()->staticBody(), pos );
     return true;
 }
 
@@ -72,7 +72,7 @@ void PolygonTool::endCreating(const QPointF &pos) {
     if (m_primitive) {
         m_primitive->removeLast();
         if (m_primitive->pointsAmount()>2) {
-            CreatePrimitiveCommand* cmd = new CreatePrimitiveCommand(m_primitive);
+            CreatePrimitiveCommand* cmd = new CreatePrimitiveCommand(scene()->staticBody(),m_primitive);
             m_primitive = 0;
             scene()->execCommand(cmd);
         } else {

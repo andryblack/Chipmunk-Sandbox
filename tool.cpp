@@ -25,7 +25,7 @@ bool Tool::beginCreating( const QPointF& pos ) {
     return false;
 }
 
-void Tool::endCreating(const QPointF &pos) {
+void Tool::endCreating(const QPointF &/*pos*/) {
     m_creating = false;
 }
 
@@ -37,7 +37,7 @@ bool Tool::onMousePress( const QPointF& pos ) {
     return false;
 }
 
-bool Tool::onMouseMove( const QPointF& pos ) {
+bool Tool::onMouseMove( const QPointF&/*pos*/ ) {
     return creating();
 }
 

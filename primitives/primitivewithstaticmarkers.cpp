@@ -2,8 +2,8 @@
 #include "../primitive.h"
 #include "../primitivemarker.h"
 
-PrimitiveWithStaticMarkers::PrimitiveWithStaticMarkers(Scene *scene, QObject *parent) :
-    Primitive(scene,parent)
+PrimitiveWithStaticMarkers::PrimitiveWithStaticMarkers(Body *body, QObject *parent) :
+    Primitive(body,parent)
 {
 }
 

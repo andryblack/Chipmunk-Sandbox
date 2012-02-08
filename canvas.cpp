@@ -14,13 +14,19 @@
 
 #include <cmath>
 
-Canvas::Canvas(Tools* tools,Scene* scene,QWidget *parent) :
-    QWidget(parent), m_tools(tools),m_scene(scene)
+Canvas::Canvas(QWidget *parent) :
+    QWidget(parent), m_tools(0),m_scene(0)
 {
-    setFixedSize(size());
     m_drawGrid = true;
     m_gridSize = 10;
     m_snapToGrid = false;
+
+}
+
+void Canvas::init(Tools* tools,Scene* scene) {
+    m_tools = tools;
+    m_scene = scene;
+    setFixedSize(size());
     connect(scene,SIGNAL(zoomChanged()),this,SLOT(onZoomChanged()));
     setMouseTracking(true);
 }
