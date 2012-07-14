@@ -107,6 +107,11 @@ void Scene::addSelected(Primitive* p) {
     emit selectionChanged();
 }
 
+void Scene::removeSelected(Primitive* p) {
+    m_selected.removeAll(p);
+    emit selectionChanged();
+}
+
 Primitive* Scene::selected() const {
     if (m_selected.size()==1)
         return m_selected.front();

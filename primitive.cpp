@@ -20,7 +20,7 @@ int Primitive::childCount() const {
     return 0;
 }
 
-SceneTreeItem* Primitive::child(int indx) {
+SceneTreeItem* Primitive::child(int /*indx*/) {
     return 0;
 }
 
@@ -32,3 +32,6 @@ SceneTreeItem* Primitive::parent() const {
     return m_body;
 }
 
+void Primitive::select( bool s ) {
+    if (m_body) m_body->selectPrimitive(this,s);
+}

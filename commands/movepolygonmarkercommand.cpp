@@ -11,18 +11,21 @@ MovePolygonMarkerCommand::MovePolygonMarkerCommand(PolygonPrimitive *p, int inde
 void MovePolygonMarkerCommand::Execute(Scene* scene)  {
     m_primitive->movePoint( m_index, m_to );
     scene->setText(m_primitive->text());
+    m_primitive->update();
     scene->update();
 }
 
 void MovePolygonMarkerCommand::Undo(Scene* scene) {
     m_primitive->movePoint( m_index, m_from );
     scene->setText(m_primitive->text());
+    m_primitive->update();
     scene->setSelected(m_primitive);
 }
 
 void MovePolygonMarkerCommand::Redo(Scene* scene)  {
     m_primitive->movePoint( m_index, m_to );
     scene->setText(m_primitive->text());
+    m_primitive->update();
     scene->setSelected(m_primitive);
 }
 

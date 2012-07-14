@@ -41,6 +41,9 @@ public:
     Primitive* getPrimitiveAtPoint(const QPointF &pnt);
 
     void execCommand( Command* cmd );
+
+    virtual void select( bool s);
+    void selectPrimitive( Primitive* p , bool select);
 signals:
     void changed();
 public slots:

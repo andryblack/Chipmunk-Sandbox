@@ -4,6 +4,7 @@
 #include "../primitive.h"
 #include <QPointF>
 #include <QPolygonF>
+#include <QPair>
 
 class PolygonPrimitiveMarker;
 
@@ -13,6 +14,9 @@ class PolygonPrimitive : public Primitive
 public:
     explicit PolygonPrimitive(Body *body,const QPointF& pos,QObject *parent = 0);
     
+    typedef QPair<int,int> Diagonal;
+    typedef QVector<Diagonal> Diagonals;
+
     virtual void Draw( const Canvas* canvas , QPainter* painter) const;
     virtual void DrawMarkers( const Canvas* canvas, QPainter* painter ) const;
 
@@ -41,6 +45,10 @@ public:
     void    addPoint( int index, const QPointF& pos);
 
     virtual QString iconFile() const { return ":/icons/polygon.png"; }
+
+
+    void update();
+    const Diagonals& diagonals() const { return m_diagonals; }
 signals:
     
 public slots:
@@ -49,6 +57,8 @@ private:
     void updateText();
     QPolygonF    m_points;
     QVector<PolygonPrimitiveMarker*>    m_corner_markers;
+    Diagonals   m_diagonals;
+    void recalcDiagonals();
 };
 
 #endif // POLYGONPRIMITIVE_H

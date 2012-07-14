@@ -166,6 +166,10 @@ void Canvas::Draw(const PolygonPrimitive* polygon, QPainter* painter, bool creat
         }
     } else {
         painter->drawPolygon(QPolygonF(points));
+        const PolygonPrimitive::Diagonals& diags = polygon->diagonals();
+        for (int i=0;i<diags.size();i++) {
+            painter->drawLine(points[diags[i].first],points[diags[i].second]);
+        }
     }
 
     if (sz.width()>10 && sz.height()>10) {

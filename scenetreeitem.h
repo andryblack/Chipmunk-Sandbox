@@ -16,6 +16,7 @@ public:
     virtual int indexOf(SceneTreeItem* child) = 0;
     virtual SceneTreeItem* parent() const = 0;
     virtual QString iconFile() const { return "empty"; }
+    virtual void select( bool s) = 0;
 signals:
     
 public slots:

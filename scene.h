@@ -30,7 +30,9 @@ public:
     void clearSelection();
     void setSelected(Primitive* p);
     void addSelected(Primitive* p);
+    void removeSelected(Primitive* p);
     Primitive* selected() const;
+    const QList<Primitive*>& selectedPrimitives() const { return m_selected; }
 
     void update();
 

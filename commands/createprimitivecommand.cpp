@@ -11,17 +11,20 @@ CreatePrimitiveCommand::CreatePrimitiveCommand(Body *body,Primitive *p, QObject 
 void CreatePrimitiveCommand::Execute(Scene* scene) {
     m_body->addPrimitive(m_primitive);
     scene->setText(m_primitive->text());
+    m_primitive->update();
 }
 
 void CreatePrimitiveCommand::Undo(Scene* scene) {
     m_primitive->setParent(this);
     m_body->removePrimitive(m_primitive);
     scene->setText("");
+    m_primitive->update();
 }
 
 void CreatePrimitiveCommand::Redo(Scene* scene) {
     m_body->addPrimitive(m_primitive);
     scene->setText(m_primitive->text());
+    m_primitive->update();
 }
 
 QString CreatePrimitiveCommand::text() const {

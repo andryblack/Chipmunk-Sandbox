@@ -41,7 +41,8 @@ SOURCES += main.cpp\
     commands/createpolygonpointcommand.cpp \
     scenetreemodel.cpp \
     scenetreeitem.cpp \
-    body.cpp
+    body.cpp \
+    sceneselectionmodel.cpp
 
 HEADERS  += mainwindow.h \
     canvas.h \
@@ -73,7 +74,8 @@ HEADERS  += mainwindow.h \
     commands/createpolygonpointcommand.h \
     scenetreemodel.h \
     scenetreeitem.h \
-    body.h
+    body.h \
+    sceneselectionmodel.h
 
 FORMS    += mainwindow.ui
 

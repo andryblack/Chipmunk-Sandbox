@@ -4,6 +4,7 @@
 #include "../body.h"
 #include "../commands/createpolygonpointcommand.h"
 #include <cmath>
+#include <QtAlgorithms>
 
 PolygonPrimitive::PolygonPrimitive(Body *body,const QPointF& pos,QObject *parent) :
     Primitive(body,parent)
@@ -171,4 +172,161 @@ void PolygonPrimitive::move( const QPointF& pos ) {
     updateText();
 }
 
+/// Mark Keil's Algorithm
+static inline int ring( const QPolygonF& polygon, int i) {
+    if (i<0) return polygon.size()+i;
+    return i % polygon.size();
+}
+
+static bool intersect(const QPointF& start1, const QPointF& end1, const QPointF& start2, const QPointF& end2)
+    {
+        QPointF dir1 = end1 - start1;
+        QPointF dir2 = end2 - start2;
+
+        //считаем уравнения прямых проходящих через отрезки
+        qreal a1 = -dir1.y();
+        qreal b1 = +dir1.x();
+        qreal d1 = -(a1*start1.x() + b1*start1.y());
+
+        qreal a2 = -dir2.y();
+        qreal b2 = +dir2.x();
+        qreal d2 = -(a2*start2.x() + b2*start2.y());
+
+        //подставляем концы отрезков, для выяснения в каких полуплоскотях они
+        qreal seg1_line2_start = a2*start1.x() + b2*start1.y() + d2;
+        qreal seg1_line2_end = a2*end1.x() + b2*end1.y() + d2;
+
+        qreal seg2_line1_start = a1*start2.x() + b1*start2.y() + d1;
+        qreal seg2_line1_end = a1*end2.x() + b1*end2.y() + d1;
+
+        //если концы одного отрезка имеют один знак, значит он в одной полуплоскости и пересечения нет.
+        if (seg1_line2_start * seg1_line2_end >= 0 || seg2_line1_start * seg2_line1_end >= 0)
+            return false;
+
+
+        return true;
+    }
+
+static qreal area(const QPointF &a, const QPointF &b, const QPointF &c) {
+    return (((b.x() - a.x())*(c.y() - a.y()))-((c.x() - a.x())*(b.y() - a.y())));
+}
+
+static bool leftOn(const QPointF &a, const QPointF &b, const QPointF &c) {
+    return area(a, b, c) >= 0;
+}
+
+static bool rightOn(const QPointF &a, const QPointF &b, const QPointF &c) {
+    return area(a, b, c) <= 0;
+}
+
+static bool isReflex(const QPolygonF& p,int i) {
+    return area(p[ring(p,i-1)], p[i], p[ring(p,i+1)])<0;
+}
+
+static bool can_see( const QPolygonF& polygon, int p1, int p2 ) {
+    QPointF a1 = polygon[p1];
+    QPointF a2 = polygon[p2];
+
+    if (leftOn(polygon[ring(polygon,p1 + 1)], a1, a2) && leftOn(polygon[ring(polygon,p1 - 1)], a1, a2)) {
+        return false;
+    }
+    if (rightOn(polygon[ring(polygon,p1 + 1)], a1, a2) && rightOn(polygon[ring(polygon,p1 - 1)], a1, a2)) {
+        return false;
+    }
+    for (int i=0;i<polygon.size();++i) {
+        if (i==p1) continue;
+        if (i==p2) continue;
+        int i1 = ring(polygon,i+1);
+        if (i1==p1) continue;
+        if (i1==p2) continue;
+
+        QPointF b1 = polygon[i];
+        QPointF b2 = polygon[i1];
+        if (intersect(a1,a2,b1,b2))
+            return false;
+    }
+    return true;
+}
+
+
+static void split( const QPolygonF& polygon, int p1, int p2, QPolygonF& left, QPolygonF& right) {
+    for (int i=p1;i!=p2;) {
+        left.push_back(polygon[i]);
+        i = ring(polygon,i+1);
+    }
+    for (int i=p2;i!=p1;) {
+        right.push_back(polygon[i]);
+        i = ring(polygon,i+1);
+    }
+}
+
+
+static PolygonPrimitive::Diagonals merge( const PolygonPrimitive::Diagonals& a, const PolygonPrimitive::Diagonals& b,const QPolygonF& polygon,int i,int j) {
+    PolygonPrimitive::Diagonals res;
+    foreach ( PolygonPrimitive::Diagonal d, a ) {
+        d.first = ring( polygon, d.first+i );
+        d.second = ring( polygon, d.second+i );
+        res.push_back(d);
+    }
+    foreach ( PolygonPrimitive::Diagonal d, b ) {
+        d.first = ring( polygon, d.first+j );
+        d.second = ring( polygon, d.second+j );
+        res.push_back(d);
+    }
+    return res;
+}
+
+static PolygonPrimitive::Diagonals decomp( const QPolygonF& polygon ) {
+    PolygonPrimitive::Diagonals tmp;
+    if (polygon.size()<4) return tmp;
+    PolygonPrimitive::Diagonals min;
+    int ndiags = polygon.size();
+    for (int i=0;i<polygon.size();++i) {
+        if ( isReflex(polygon,i) ) {
+            for (int j=0;j<polygon.size();j++) {
+                if (i!=j && (i!=ring(polygon,j+1)) && (j!=ring(polygon,i+1))) {
+                    if (can_see(polygon,i,j)) {
+                        QPolygonF left;
+                        QPolygonF right;
+                        split( polygon,i,j,left,right);
+                        tmp = merge( decomp( left ) , decomp( right ),polygon,i,j);
+                        if (tmp.size()<ndiags) {
+                            min = tmp;
+                            ndiags = tmp.size();
+                            min.push_back( PolygonPrimitive::Diagonal(i,j) );
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return min;
+}
+
+void PolygonPrimitive::update() {
+    /// make CCW
+    int br = 0;
+
+    if (m_points.size()<3) return;
+
+    // find bottom right point
+    for (int i = 1; i < m_points.size(); ++i) {
+        if (m_points[i].y() < m_points[br].y() || (m_points[i].y() == m_points[br].y() && m_points[i].x() > m_points[br].x())) {
+            br = i;
+        }
+    }
+
+    // reverse poly if clockwise
+    if (area(m_points[ring(m_points,br - 1)], m_points[br], m_points[ring(m_points,br + 1)])<0) {
+        std::reverse( m_points.begin(),m_points.end() );
+    }
+
+    recalcDiagonals();
+}
+
+void PolygonPrimitive::recalcDiagonals() {
+    m_diagonals.clear();
+    if (m_points.size()<3) return;
+    m_diagonals = decomp(m_points);
+}
 

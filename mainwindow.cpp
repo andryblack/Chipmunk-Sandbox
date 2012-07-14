@@ -9,6 +9,7 @@
 #include "history.h"
 #include "scene.h"
 #include "scenetreemodel.h"
+#include "sceneselectionmodel.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -81,9 +82,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m_scene_model = new SceneTreeModel(m_scene,this);
     ui->treeView->setModel(m_scene_model);
+    m_scene_selection = new SceneSelectionModel(m_scene,m_scene_model,this);
+    ui->treeView->setSelectionModel(m_scene_selection);
+    connect(m_scene_selection,SIGNAL(selectByThree()),m_tools,SLOT(activateEditTool()));
 
     connect(m_scene,SIGNAL(textChanged()),this,SLOT(onSceneTextChanged()));
     connect(m_scene,SIGNAL(changed()),this,SLOT(onSceneChanged()));
+    connect(m_scene_selection,SIGNAL(selectionChanged(QItemSelection,QItemSelection)),this,SLOT(onSceneSelectionChanged()));
 }
 
 
@@ -208,6 +213,8 @@ void MainWindow::onToolChanged() {
         }*/
     }
 }
+
+
 
 MainWindow::~MainWindow()
 {

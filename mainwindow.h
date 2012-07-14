@@ -14,6 +14,7 @@ class History;
 class Scene;
 class QSettings;
 class SceneTreeModel;
+class SceneSelectionModel;
 
 class MainWindow : public QMainWindow
 {
@@ -43,6 +44,7 @@ private:
     History*    m_history;
     QVector<QAction*> m_tools_actions;
     SceneTreeModel* m_scene_model;
+    SceneSelectionModel*    m_scene_selection;
 };
 
 #endif // MAINWINDOW_H

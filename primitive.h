@@ -17,7 +17,7 @@ class Primitive : public SceneTreeItem
 {
     Q_OBJECT
 public:
-    explicit Primitive(Body* scene,QObject *parent = 0);
+    explicit Primitive(Body* body,QObject *parent = 0);
     Body*  body();
 
     qreal   sceneZoom() const;
@@ -40,6 +40,10 @@ public:
     virtual SceneTreeItem* child(int indx);
     virtual int indexOf(SceneTreeItem* child);
     virtual SceneTreeItem* parent() const;
+
+    virtual void select( bool s );
+
+    virtual void update() {}
 signals:
     
 public slots:

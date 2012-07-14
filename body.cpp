@@ -60,6 +60,22 @@ Primitive* Body::getPrimitiveAtPoint(const QPointF &pnt) {
     return 0;
 }
 
+void Body::select( bool s) {
+    if (s) {
+
+    } else {
+
+    }
+}
+
+void Body::selectPrimitive( Primitive* p , bool select) {
+    if (select) {
+        m_scene->addSelected(p);
+    } else {
+        m_scene->removeSelected(p);
+    }
+}
+
 StaticBody::StaticBody(Scene* scene,const QString &name, QObject *parent) :
     Body(scene,name,parent) {
 
