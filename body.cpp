@@ -41,6 +41,10 @@ Primitive* Body::primitive(int indx) {
     return m_primitives.at(indx);
 }
 
+int Body::primitiveIndex( Primitive* p) const {
+    return m_primitives.indexOf(p);
+}
+
 void Body::addPrimitive(Primitive* p) {
     p->setParent(this);
     m_primitives.push_back(p);

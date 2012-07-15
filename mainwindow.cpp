@@ -10,6 +10,7 @@
 #include "scene.h"
 #include "scenetreemodel.h"
 #include "sceneselectionmodel.h"
+#include "primitive.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -20,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QSettings settings;
     restoreGeometry(settings.value("geometry").toByteArray());
     ui->splitter->restoreState(settings.value("splitter").toByteArray());
+    ui->splitter_2->restoreState(settings.value("splitter2").toByteArray());
 
     ui->actionGrid_draw->setChecked(settings.value("grid_draw").toBool());
     ui->actionGrid_snap->setChecked(settings.value("grid_snap").toBool());
@@ -89,6 +91,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_scene,SIGNAL(textChanged()),this,SLOT(onSceneTextChanged()));
     connect(m_scene,SIGNAL(changed()),this,SLOT(onSceneChanged()));
     connect(m_scene_selection,SIGNAL(selectionChanged(QItemSelection,QItemSelection)),this,SLOT(onSceneSelectionChanged()));
+
 }
 
 
@@ -97,6 +100,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
      QSettings settings;
      settings.setValue("geometry", saveGeometry());
      settings.setValue("splitter",ui->splitter->saveState());
+     settings.setValue("splitter2",ui->splitter_2->saveState() );
      settings.setValue("grid_draw",ui->actionGrid_draw->isChecked());
      settings.setValue("grid_snap",ui->actionGrid_snap->isChecked());
      settings.setValue("zoom",m_scene->zoom());
@@ -182,6 +186,12 @@ void MainWindow::onSceneChanged() {
 }
 
 void MainWindow::onSceneSelectionChanged() {
+    QList< SceneTreeItem* > items;
+    foreach (Primitive* p,  m_scene->selectedPrimitives() ) {
+        items.push_back( p );
+    }
+
+    ui->propertyBrowser->setSelectedObjects( items );
     ui->canvasWidget->repaint();
 }
 

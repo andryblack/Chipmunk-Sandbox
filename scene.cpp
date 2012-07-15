@@ -151,3 +151,10 @@ Body* Scene::body(int indx) {
     }
     return m_bodys.at(indx-1);
 }
+
+int Scene::bodyIndex( Body* b) const {
+    if ( b == m_static_body ) return 0;
+    int idx = m_bodys.indexOf(b);
+    if (idx>=0) return idx + 1;
+    return idx;
+}

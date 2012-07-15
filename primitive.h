@@ -34,7 +34,10 @@ public:
 
     const QString&  text() const { return m_text; }
 
+    void setName( const QString& name ) { m_name = name; }
     QString name() const { return m_name; }
+
+    Q_PROPERTY( QString name    READ name WRITE setName)
 
     virtual int childCount() const;
     virtual SceneTreeItem* child(int indx);
@@ -50,7 +53,6 @@ public slots:
     
 protected:
     void setText( const QString& t ) { m_text = t; }
-    void setName( const QString& name ) { m_name = name; }
 private:
     Body*  m_body;
     QString m_text;

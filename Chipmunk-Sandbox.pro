@@ -42,7 +42,8 @@ SOURCES += main.cpp\
     scenetreemodel.cpp \
     scenetreeitem.cpp \
     body.cpp \
-    sceneselectionmodel.cpp
+    sceneselectionmodel.cpp \
+    propertybrowser.cpp
 
 HEADERS  += mainwindow.h \
     canvas.h \
@@ -75,10 +76,12 @@ HEADERS  += mainwindow.h \
     scenetreemodel.h \
     scenetreeitem.h \
     body.h \
-    sceneselectionmodel.h
+    sceneselectionmodel.h \
+    propertybrowser.h
 
 FORMS    += mainwindow.ui
 
+include( qtpropertybrowser/qtpropertybrowser.pri )
 
 RESOURCES += \
     icons.qrc

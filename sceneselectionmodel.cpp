@@ -1,6 +1,8 @@
 #include "sceneselectionmodel.h"
 #include "scenetreeitem.h"
 #include "scene.h"
+#include "primitive.h"
+#include "body.h"
 
 SceneSelectionModel::SceneSelectionModel(Scene* scene, QAbstractItemModel *model, QObject *parent) :
     QItemSelectionModel(model,parent),m_scene(scene)
@@ -42,7 +44,8 @@ void SceneSelectionModel::onSceneSelectionChanged() {
     Primitive* p = m_scene->selected();
     QModelIndex indx;
     if (p) {
-
+        QModelIndex pi = model()->index(m_scene->bodyIndex(p->body()),0);
+        indx = model()->index(p->body()->primitiveIndex(p),0,pi);
     }
     QItemSelection new_selection;
     new_selection.push_back(QItemSelectionRange(indx,indx));

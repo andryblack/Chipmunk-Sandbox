@@ -53,6 +53,7 @@ public:
     Body* body(int indx);
 
     Body* staticBody();
+    int bodyIndex( Body* b) const;
 
     void addBody( Body* b );
 signals:

@@ -18,7 +18,7 @@ public:
     virtual QString iconFile() const { return "empty"; }
     virtual void select( bool s) = 0;
 signals:
-    
+    void propertyChanged() const;
 public slots:
     
 };

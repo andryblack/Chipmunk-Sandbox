@@ -19,6 +19,9 @@ public:
     virtual QPointF position() const;
     virtual QSizeF size() const;
 
+    Q_PROPERTY(QPointF  position    READ position    )
+    Q_PROPERTY(QSizeF   size        READ size    )
+
     virtual void move( const QPointF& pos );
 
     void setSize( const QSizeF& size );

@@ -37,6 +37,7 @@ public:
 
     int primitivesCount() const;
     Primitive* primitive(int indx);
+    int primitiveIndex(Primitive *p) const;
 
     Primitive* getPrimitiveAtPoint(const QPointF &pnt);
 
