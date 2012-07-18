@@ -82,6 +82,10 @@ void BoxPrimitive::move( const QPointF& pos ) {
     updateText();
 }
 
+void BoxPrimitive::setPosition( const QPointF& pos ) {
+    move( pos );
+}
+
 void BoxPrimitive::setSize( const QSizeF& size ) {
     m_rect.setSize(size);
     emit propertyChanged();

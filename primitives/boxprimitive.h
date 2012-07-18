@@ -19,12 +19,14 @@ public:
     virtual QPointF position() const;
     virtual QSizeF size() const;
 
-    Q_PROPERTY(QPointF  position    READ position    )
-    Q_PROPERTY(QSizeF   size        READ size    )
+    void setPosition( const QPointF& pos );
+    void setSize(const QSizeF &size);
+
+    Q_PROPERTY(QPointF  position    READ position   WRITE setPosition   )
+    Q_PROPERTY(QSizeF   size        READ size       WRITE setSize )
 
     virtual void move( const QPointF& pos );
 
-    void setSize( const QSizeF& size );
 
     bool    setTopLeft( const QPointF& pos );
     bool    setTopRight( const QPointF& pos );

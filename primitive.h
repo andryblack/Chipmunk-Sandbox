@@ -34,7 +34,10 @@ public:
 
     const QString&  text() const { return m_text; }
 
-    void setName( const QString& name ) { m_name = name; }
+    void setName( const QString& name ) {
+        m_name = name;
+        emit propertyChanged();
+    }
     QString name() const { return m_name; }
 
     Q_PROPERTY( QString name    READ name WRITE setName)

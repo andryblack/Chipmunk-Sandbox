@@ -78,6 +78,7 @@ MainWindow::MainWindow(QWidget *parent) :
         a->setActionGroup(group);
     }
 
+    ui->propertyBrowser->setHistory(m_history);
 
     connect(m_tools,SIGNAL(changed()),this,SLOT(onToolChanged()));
     onToolChanged();

@@ -7,11 +7,13 @@
 
 #include <QMetaProperty>
 #include <QDateTime>
-#include "PropertyBrowser.h"
+#include "propertybrowser.h"
+#include "commands/properychangedcommand.h"
 
 
 PropertyBrowser::PropertyBrowser(QWidget* parent)
     : QtTreePropertyBrowser(parent)
+    , m_history(0)
     , m_variantManager(new QtVariantPropertyManager(this))
     , m_variantEditorFactory(new QtVariantEditorFactory(this))
 {
@@ -28,7 +30,15 @@ void PropertyBrowser::valueChanged(QtProperty *property, const QVariant &value)
 {
     if(m_propertyMap.find(property) != m_propertyMap.end()) { 
         foreach(SceneTreeItem *obj, m_selectedObjects) {
-            obj->setProperty(m_propertyMap[property], value);
+            const char* prop = m_propertyMap[property];
+            if (m_history) {
+                m_history->appendCommand( new ProperyChangedCommand(
+                                              obj,
+                                              prop,
+                                              obj->property(prop),
+                                              value) );
+            }
+            obj->setProperty(prop, value);
         }
     }
 }

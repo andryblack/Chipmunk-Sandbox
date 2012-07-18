@@ -11,18 +11,20 @@
 #include <qtpropertybrowser/qttreepropertybrowser.h>
 #include <qtpropertybrowser/qtvariantproperty.h>
 #include "scenetreeitem.h"
+#include "history.h"
 
 class PropertyBrowser : public QtTreePropertyBrowser {
     Q_OBJECT
 public:
     PropertyBrowser(QWidget *parent = NULL);
     void setSelectedObjects(const QList<SceneTreeItem*> objs);
-
+    void setHistory( History* h ) { m_history = h; }
 private slots:
     void valueChanged(QtProperty *property, const QVariant &value);
     void objectUpdated();
 
 private:
+    History*    m_history;
     QString humanize(QString str) const;
     QtVariantPropertyManager *m_variantManager;
     QMap<QtProperty*, QByteArray> m_propertyMap;

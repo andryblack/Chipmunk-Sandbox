@@ -17,6 +17,8 @@ void CreatePrimitiveCommand::Execute(Scene* scene) {
 void CreatePrimitiveCommand::Undo(Scene* scene) {
     m_primitive->setParent(this);
     m_body->removePrimitive(m_primitive);
+    if (scene->selected()==m_primitive)
+        scene->clearSelection();
     scene->setText("");
     m_primitive->update();
 }
