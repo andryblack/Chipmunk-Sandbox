@@ -9,6 +9,7 @@ Scene::Scene(History *history, QObject *parent) :
 {
     m_zoom = 1.0f;
     m_worldSize = QSize(1024,768);
+    m_active_body = 0;
 
     m_static_body = new StaticBody(this,"static",this);
     connect( m_static_body,SIGNAL(changed()),this,SLOT(bodyChanged()));
@@ -17,6 +18,13 @@ Scene::Scene(History *history, QObject *parent) :
 void Scene::addBody( Body* b ) {
     connect( b,SIGNAL(changed()),this,SLOT(bodyChanged()));
     m_bodys.push_back( b );
+    b->setParent(this);
+    emit changed();
+}
+
+void Scene::removeBody( Body* b ) {
+    m_bodys.removeAll(b);
+    emit changed();
 }
 
 void Scene::bodyChanged() {
@@ -93,23 +101,57 @@ Primitive* Scene::getPrimitiveAtPoint(const QPointF &pnt) {
 
 void Scene::clearSelection() {
     m_selected.clear();
+    m_body_selected.clear();
     emit selectionChanged();
 }
 
 void Scene::setSelected(Primitive* p) {
+    m_body_selected.clear();
     m_selected.clear();
-    m_selected.push_back(p);
+    if (p) {
+        m_selected.push_back(p);
+        setActiveBody(p->body());
+    }
+    emit selectionChanged();
+}
+
+void Scene::setSelected(Body* b) {
+    m_selected.clear();
+    m_body_selected.clear();
+    if (b) {
+        m_body_selected.push_back(b);
+        setActiveBody(b);
+    }
     emit selectionChanged();
 }
 
 void Scene::addSelected(Primitive* p) {
-    m_selected.push_back(p);
+    if (p) {
+        m_selected.push_back(p);
+        setActiveBody(p->body());
+    }
     emit selectionChanged();
 }
 
 void Scene::removeSelected(Primitive* p) {
     m_selected.removeAll(p);
     emit selectionChanged();
+}
+
+void Scene::addSelected(Body* p) {
+    m_body_selected.push_back(p);
+    setActiveBody(p);
+    emit selectionChanged();
+}
+
+void Scene::removeSelected(Body* p) {
+    m_body_selected.removeAll(p);
+    emit selectionChanged();
+}
+
+void Scene::setActiveBody(Body *b) {
+    m_active_body = b;
+    emit changed();
 }
 
 Primitive* Scene::selected() const {
@@ -141,9 +183,9 @@ int Scene::bodysCount() const {
     return m_bodys.size()+1;
 }
 
-Body* Scene::staticBody() {
+/*Body* Scene::staticBody() {
     return m_static_body;
-}
+}*/
 
 Body* Scene::body(int indx) {
     if (indx==0) {

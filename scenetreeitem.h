@@ -17,10 +17,12 @@ public:
     virtual SceneTreeItem* parent() const = 0;
     virtual QString iconFile() const { return "empty"; }
     virtual void select( bool s) = 0;
+    virtual bool active() const { return false; }
 signals:
     void propertyChanged() const;
 public slots:
-    
+private:
+
 };
 
 #endif // SCENETREEITEM_H

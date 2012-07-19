@@ -11,5 +11,12 @@
         <file>icons/box.png</file>
         <file>icons/circle.png</file>
         <file>icons/polygon.png</file>
+        <file>icons/car--plus.png</file>
+        <file>icons/car.png</file>
+        <file>icons/minus.png</file>
+        <file>icons/wall--plus.png</file>
+        <file>icons/wall.png</file>
+        <file>icons/car-red.png</file>
+        <file>icons/wall-brick.png</file>
     </qresource>
 </RCC>

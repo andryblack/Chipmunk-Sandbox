@@ -32,7 +32,7 @@ bool CircleTool::beginCreating(const QPointF &pos) {
     if (m_primitive)
         delete m_primitive;
     m_primitive = 0;
-    m_primitive = new CirclePrimitive( scene()->staticBody(), pos, 5.0 );
+    m_primitive = new CirclePrimitive( scene()->activeBody(), pos, 5.0 );
     return true;
 }
 
@@ -47,7 +47,7 @@ void CircleTool::endCreating(const QPointF &pos) {
         return;
     }
 
-    CreatePrimitiveCommand* cmd = new CreatePrimitiveCommand(scene()->staticBody(),m_primitive);
+    CreatePrimitiveCommand* cmd = new CreatePrimitiveCommand(scene()->activeBody(),m_primitive);
     m_primitive = 0;
     scene()->execCommand(cmd);
 

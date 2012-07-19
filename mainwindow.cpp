@@ -11,6 +11,8 @@
 #include "scenetreemodel.h"
 #include "sceneselectionmodel.h"
 #include "primitive.h"
+#include "body.h"
+#include "commands/createbodycommand.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -25,6 +27,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->actionGrid_draw->setChecked(settings.value("grid_draw").toBool());
     ui->actionGrid_snap->setChecked(settings.value("grid_snap").toBool());
+    bool ok = false;
+    int splitterVal = settings.value("propertiesSplit").toInt(&ok);
+    if ( ok )
+        ui->propertyBrowser->setSplitterPosition(splitterVal);
 
     m_history = new History(this);
 
@@ -102,6 +108,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
      settings.setValue("geometry", saveGeometry());
      settings.setValue("splitter",ui->splitter->saveState());
      settings.setValue("splitter2",ui->splitter_2->saveState() );
+     settings.setValue("propertiesSplit",ui->propertyBrowser->splitterPosition() );
      settings.setValue("grid_draw",ui->actionGrid_draw->isChecked());
      settings.setValue("grid_snap",ui->actionGrid_snap->isChecked());
      settings.setValue("zoom",m_scene->zoom());
@@ -191,7 +198,11 @@ void MainWindow::onSceneSelectionChanged() {
     foreach (Primitive* p,  m_scene->selectedPrimitives() ) {
         items.push_back( p );
     }
-
+    if ( items.empty() ) {
+        foreach (Body* b,  m_scene->selectedBodies() ) {
+            items.push_back( b );
+        }
+    }
     ui->propertyBrowser->setSelectedObjects( items );
     ui->canvasWidget->repaint();
 }
@@ -230,4 +241,17 @@ void MainWindow::onToolChanged() {
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+
+void MainWindow::on_toolButtonAddBody_clicked()
+{
+    Body* b = new DynamicBody(m_scene,"dynamic",m_scene);
+    m_scene->execCommand( new CreateBodyCommand(b,m_scene) );
+}
+
+void MainWindow::on_toolButtonAddStaticBody_clicked()
+{
+    Body* b = new StaticBody(m_scene,"static",m_scene);
+    m_scene->execCommand( new CreateBodyCommand(b,m_scene) );
 }

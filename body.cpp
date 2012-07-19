@@ -1,10 +1,12 @@
 #include "body.h"
 #include "scene.h"
 #include "primitive.h"
+#include <QPainter>
 
 Body::Body(Scene* scene,const QString& name,QObject *parent) :
-    SceneTreeItem(parent),m_scene(scene),m_name(name)
+    SceneTreeItem(parent),m_scene(scene)
 {
+    setObjectName(name);
 }
 
 
@@ -64,11 +66,15 @@ Primitive* Body::getPrimitiveAtPoint(const QPointF &pnt) {
     return 0;
 }
 
+bool Body::active() const {
+    return m_scene->activeBody()==this;
+}
+
 void Body::select( bool s) {
     if (s) {
-
+        m_scene->addSelected(this);
     } else {
-
+        m_scene->removeSelected(this);
     }
 }
 
@@ -80,19 +86,59 @@ void Body::selectPrimitive( Primitive* p , bool select) {
     }
 }
 
-StaticBody::StaticBody(Scene* scene,const QString &name, QObject *parent) :
-    Body(scene,name,parent) {
-
-}
-
-void StaticBody::Draw( const Canvas* canvas , QPainter* painter, const QList<Primitive*>& selected ) const {
+void Body::Draw( const Canvas* canvas , QPainter* painter, const QList<Primitive*>& selected ) const {
+    qreal opc = painter->opacity();
+    if (!active())
+        painter->setOpacity(opc * 0.3);
     foreach ( Primitive* p, m_primitives ) {
         if (selected.indexOf(p)==-1) {
             p->Draw( canvas, painter );
         }
     }
+    painter->setOpacity(opc);
 }
 
-void StaticBody::Draw( const Canvas* canvas , QPainter* painter, const Primitive* selected ) const {
+void Body::Draw( const Canvas* canvas , QPainter* painter, const Primitive* selected ) const {
     selected->Draw(canvas,painter);
+}
+
+StaticBody::StaticBody(Scene* scene,const QString &name, QObject *parent) :
+    Body(scene,name,parent) {
+
+}
+
+
+
+QString StaticBody::iconFile() const {
+    if (active())
+        return ":/icons/wall-brick.png";
+    return  ":/icons/wall.png";
+}
+
+DynamicBody::DynamicBody(Scene* scene,const QString& name,QObject* parent) :
+    Body(scene,name,parent),
+    m_mass(1),
+    m_moment(1),
+    m_position(0,0),
+    m_velocity(0,0),
+    m_force(0,0),
+    m_angle(0),
+    m_angle_vel(0),
+    m_torque(0),
+    m_vel_limit(0),
+    m_angle_vel_limit(0){
+
+}
+
+void DynamicBody::Draw( const Canvas* canvas , QPainter* painter, const QList<Primitive*>& selected ) const {
+    Body::Draw(canvas,painter,selected);
+}
+void DynamicBody::Draw( const Canvas* canvas , QPainter* painter, const Primitive* selected ) const {
+    Body::Draw(canvas,painter,selected);
+}
+
+QString DynamicBody::iconFile() const {
+    if (active())
+        return ":/icons/car-red.png";
+    return ":/icons/car.png";
 }

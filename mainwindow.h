@@ -36,6 +36,11 @@ protected slots:
     void onSceneChanged();
     void onSceneTextChanged();
     void onSceneSelectionChanged();
+private slots:
+    void on_toolButtonAddBody_clicked();
+
+    void on_toolButtonAddStaticBody_clicked();
+
 private:
     Ui::MainWindow *ui;
     Tools*  m_tools;

@@ -34,6 +34,13 @@ public:
     Primitive* selected() const;
     const QList<Primitive*>& selectedPrimitives() const { return m_selected; }
 
+    void setSelected(Body* b);
+    void addSelected(Body* p);
+    void removeSelected(Body* p);
+    const QList<Body*>& selectedBodies() const { return m_body_selected; }
+    void setActiveBody(Body* b);
+    Body*   activeBody() const { return m_active_body ? m_active_body : m_static_body; }
+
     void update();
 
     const QSizeF&  worldSize() const { return m_worldSize; }
@@ -52,10 +59,11 @@ public:
     int bodysCount() const;
     Body* body(int indx);
 
-    Body* staticBody();
+    //Body* staticBody();
     int bodyIndex( Body* b) const;
 
     void addBody( Body* b );
+    void removeBody( Body* b );
 signals:
     void zoomChanged();
     void textChanged();
@@ -77,6 +85,8 @@ private:
     History*    m_history;
 
     QList<Primitive*> m_selected;
+    QList<Body*>    m_body_selected;
+    Body*   m_active_body;
 
     QSizeF       m_worldSize;
     qreal       m_zoom;

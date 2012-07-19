@@ -44,7 +44,8 @@ SOURCES += main.cpp\
     body.cpp \
     sceneselectionmodel.cpp \
     propertybrowser.cpp \
-    commands/properychangedcommand.cpp
+    commands/properychangedcommand.cpp \
+    commands/createbodycommand.cpp
 
 HEADERS  += mainwindow.h \
     canvas.h \
@@ -79,7 +80,8 @@ HEADERS  += mainwindow.h \
     body.h \
     sceneselectionmodel.h \
     propertybrowser.h \
-    commands/properychangedcommand.h
+    commands/properychangedcommand.h \
+    commands/createbodycommand.h
 
 FORMS    += mainwindow.ui
 

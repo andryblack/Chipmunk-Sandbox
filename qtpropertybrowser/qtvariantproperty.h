@@ -83,6 +83,8 @@ public:
     int valueType(const QtProperty *property) const;
     QtVariantProperty *variantProperty(const QtProperty *property) const;
 
+    void clear();
+
     virtual bool isPropertyTypeSupported(int propertyType) const;
     virtual int valueType(int propertyType) const;
     virtual QStringList attributes(int propertyType) const;

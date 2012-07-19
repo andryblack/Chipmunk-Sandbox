@@ -4,6 +4,8 @@
 #include "body.h"
 #include "primitive.h"
 #include <QIcon>
+#include <QFont>
+#include <QBrush>
 
 SceneTreeModel::SceneTreeModel(Scene *scene, QObject *parent) :
     QAbstractItemModel(parent),m_root(0),m_scene(scene)
@@ -27,6 +29,20 @@ int SceneTreeModel::columnCount(const QModelIndex &/*parent*/) const
 
      if (role == Qt::DecorationRole) {
          return QIcon(static_cast<SceneTreeItem*>(index.internalPointer())->iconFile());
+     }
+
+     if (role == Qt::FontRole) {
+         if ( static_cast<SceneTreeItem*>(index.internalPointer())->active() ) {
+             QFont fnt = QFont();
+             fnt.setBold(true);
+             return fnt;
+         }
+     }
+
+     if (role == Qt::BackgroundRole) {
+         if ( static_cast<SceneTreeItem*>(index.internalPointer())->active() ) {
+             return QBrush(QColor(0xFF,0xFE,0xA9));
+         }
      }
 
      if (role != Qt::DisplayRole)

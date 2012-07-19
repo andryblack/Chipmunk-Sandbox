@@ -347,6 +347,10 @@ public:
 
     QMap<QtProperty *, QtVariantProperty *> m_internalToProperty;
 
+    void clear() {
+        m_internalToProperty.clear();
+    }
+
     const QString m_constraintAttribute;
     const QString m_singleStepAttribute;
     const QString m_decimalsAttribute;
@@ -1231,6 +1235,7 @@ QtVariantPropertyManager::QtVariantPropertyManager(QObject *parent)
 QtVariantPropertyManager::~QtVariantPropertyManager()
 {
     clear();
+    d_ptr->clear();
 }
 
 /*!
@@ -1260,6 +1265,11 @@ bool QtVariantPropertyManager::isPropertyTypeSupported(int propertyType) const
     if (d_ptr->m_typeToValueType.contains(propertyType))
         return true;
     return false;
+}
+
+
+void QtVariantPropertyManager::clear() {
+    QtAbstractPropertyManager::clear();
 }
 
 /*!
