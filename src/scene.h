@@ -21,9 +21,6 @@ public:
     explicit Scene(History* history,QObject *parent = 0);
     
     void Draw( const Canvas* canvas, QPainter* painter) const;
-    void DrawSelected( const Canvas* canvas, QPainter* painter) const;
-    void DrawMarkers( const Canvas* canvas, QPainter* painter) const;
-
 
     Primitive* getPrimitiveAtPoint(const QPointF& p);
 
@@ -32,6 +29,7 @@ public:
     void addSelected(Primitive* p);
     void removeSelected(Primitive* p);
     Primitive* selected() const;
+    bool selected(const Primitive *p) const;
     const QList<Primitive*>& selectedPrimitives() const { return m_selected; }
 
     void setSelected(Body* b);

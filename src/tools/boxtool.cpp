@@ -2,6 +2,8 @@
 #include "../primitives/boxprimitive.h"
 #include "../commands/createprimitivecommand.h"
 #include "../scene.h"
+#include "../canvas.h"
+#include "../body.h"
 
 BoxTool::BoxTool(Scene *scene,QObject *parent) :
     Tool(scene,parent), m_primitive(0)
@@ -9,11 +11,21 @@ BoxTool::BoxTool(Scene *scene,QObject *parent) :
 }
 
 void BoxTool::Draw(const Canvas* canvas,QPainter* painter) const {
+    Body* b = scene()->activeBody();
+    if (b)
+        canvas->BeginDraw(b,painter);
     if (m_primitive)
         m_primitive->Draw(canvas,painter);
+    if (b)
+        canvas->EndDraw(b,painter);
 }
 
-bool BoxTool::onMouseMove(const QPointF &pos) {
+bool BoxTool::onMouseMove(const QPointF &pos_) {
+    Body* b = scene()->activeBody();
+    QPointF pos = pos_;
+    if (b) {
+        pos = b->toLocal(pos_);
+    }
     if (Tool::onMouseMove(pos)) {
         QPointF size = pos-beginPos();
         if (size.x()>0)
@@ -30,7 +42,12 @@ bool BoxTool::onMouseMove(const QPointF &pos) {
     return false;
 }
 
-bool BoxTool::beginCreating(const QPointF &pos) {
+bool BoxTool::beginCreating(const QPointF &pos_) {
+    Body* b = scene()->activeBody();
+    QPointF pos = pos_;
+    if (b) {
+        pos = b->toLocal(pos_);
+    }
     Tool::beginCreating(pos);
     QRect rect;
     rect.setX(pos.x());
@@ -44,7 +61,12 @@ bool BoxTool::beginCreating(const QPointF &pos) {
     return true;
 }
 
-void BoxTool::endCreating(const QPointF &pos) {
+void BoxTool::endCreating(const QPointF &pos_) {
+    Body* b = scene()->activeBody();
+    QPointF pos = pos_;
+    if (b) {
+        pos = b->toLocal(pos_);
+    }
     Tool::endCreating(pos);
     QPointF size = pos-beginPos();
     if (size.x()>0)

@@ -30,6 +30,7 @@ public slots:
 
 protected:
     Scene* scene() { return m_scene;}
+    Scene* scene() const { return m_scene;}
     virtual bool beginCreating( const QPointF& pos );
     const QPointF& beginPos() const { return m_begin_pos;}
     virtual void endCreating( const QPointF& pos );

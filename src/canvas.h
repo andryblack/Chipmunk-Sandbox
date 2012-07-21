@@ -13,6 +13,8 @@ class BoxPrimitiveMarker;
 class RotatePrimitiveMarker;
 class CirclePrimitiveMarker;
 class PolygonPrimitiveMarker;
+class Body;
+class DynamicBody;
 
 class Canvas : public QWidget
 {
@@ -25,6 +27,9 @@ public:
     bool drawGrid() const;
     bool snapToGrid() const;
 
+    void BeginDraw(const Body* body, QPainter* painter) const;
+    void Draw(const DynamicBody* body, QPainter* painter) const;
+    void EndDraw(const Body* body, QPainter* painter) const;
 
     void Draw(const BoxPrimitive* box, QPainter* painter) const;
     void Draw(const BoxPrimitiveMarker* marker, QPainter* painter) const;
@@ -60,6 +65,7 @@ private:
     int     m_gridSize;
     bool    m_snapToGrid;
     void processPos(QPointF& pos) const;
+    QPointF m_last_mouse_pos;
 };
 
 #endif // CANVAS_H

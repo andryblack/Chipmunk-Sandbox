@@ -9,6 +9,7 @@ CreateBodyCommand::CreateBodyCommand(Body* b,QObject *parent) :
 
 void CreateBodyCommand::Execute(Scene* scene) {
     scene->addBody(m_body);
+    scene->setSelected(m_body);
     //scene->setText(m_body->text());
     //m_primitive->update();
 }
@@ -23,6 +24,7 @@ void CreateBodyCommand::Undo(Scene* scene) {
 
 void CreateBodyCommand::Redo(Scene* scene) {
     scene->addBody(m_body);
+    scene->setSelected(m_body);
 }
 
 QString CreateBodyCommand::text() const {

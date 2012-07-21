@@ -8,6 +8,7 @@
 #include "primitives/circleprimitivemarker.h"
 #include "primitives/polygonprimitive.h"
 #include "primitives/polygonprimitivemarker.h"
+#include "body.h"
 
 #include <QPainter>
 #include <QMouseEvent>
@@ -96,19 +97,24 @@ void Canvas::paintEvent(QPaintEvent *) {
     m_tools->Draw(this,&painter);
 
 
-    painter.setPen(QColor(255,64,64));
-    painter.setBrush(QBrush(QColor(255,255,255,64)));
-    m_scene->DrawSelected(this,&painter);
 
-    painter.setRenderHint(QPainter::Antialiasing);
+}
 
-    painter.setBrush(QBrush(QColor(0,0,0,64)));
-    painter.setPen(QColor(255,255,255,128));
-    m_scene->DrawMarkers(this,&painter);
+void Canvas::BeginDraw(const Body* body, QPainter* painter) const {
+    painter->save();
+    qreal z = zoom();
+    painter->translate(body->position()*z);
+    painter->rotate( body->angle() * 180.0 / M_PI );
+    //painter->drawEllipse(body->toLocal(m_last_mouse_pos)*z,2,2);
 
-    painter.setPen(QColor(255,64,64));
-    painter.setBrush(Qt::NoBrush);
-    m_scene->DrawSelected(this,&painter);
+}
+void Canvas::Draw(const DynamicBody* body, QPainter* painter) const {
+    qreal z = zoom();
+    qreal r = 10 * z;
+    painter->drawEllipse(body->position(),r,r);
+}
+void Canvas::EndDraw(const Body* body, QPainter* painter) const {
+    painter->restore();
 }
 
 void Canvas::Draw(const BoxPrimitive *box, QPainter* painter) const {
@@ -255,6 +261,7 @@ void Canvas::processPos(QPointF& pos) const {
 void Canvas::mousePressEvent(QMouseEvent * event) {
     QPointF p = event->posF();
     processPos(p);
+    m_last_mouse_pos = p;
     if (m_tools->onMousePress(p)) {
         repaint();
     }
@@ -263,6 +270,7 @@ void Canvas::mousePressEvent(QMouseEvent * event) {
 void Canvas::mouseReleaseEvent(QMouseEvent *event) {
     QPointF p = event->posF();
     processPos(p);
+    m_last_mouse_pos = p;
     if (m_tools->onMouseRelease(p)) {
         repaint();
     }
@@ -271,6 +279,7 @@ void Canvas::mouseReleaseEvent(QMouseEvent *event) {
 void Canvas::mouseMoveEvent(QMouseEvent *event) {
     QPointF p = event->posF();
     processPos(p);
+    m_last_mouse_pos = p;
     if (m_tools->onMouseMove(p)) {
         repaint();
     }

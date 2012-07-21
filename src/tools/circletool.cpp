@@ -2,7 +2,8 @@
 #include "../primitives/circleprimitive.h"
 #include "../commands/createprimitivecommand.h"
 #include "../scene.h"
-
+#include "../body.h"
+#include "../canvas.h"
 #include <cmath>
 
 CircleTool::CircleTool(Scene *scene, QObject *parent) :
@@ -12,11 +13,21 @@ CircleTool::CircleTool(Scene *scene, QObject *parent) :
 
 
 void CircleTool::Draw(const Canvas* canvas,QPainter* painter) const {
+    Body* b = scene()->activeBody();
+    if (b)
+        canvas->BeginDraw(b,painter);
     if (m_primitive)
         m_primitive->Draw( canvas, painter);
+    if (b)
+        canvas->EndDraw(b,painter);
 }
 
-bool CircleTool::onMouseMove( const QPointF& pos ) {
+bool CircleTool::onMouseMove( const QPointF& pos_ ) {
+    Body* b = scene()->activeBody();
+    QPointF pos = pos_;
+    if (b) {
+        pos = b->toLocal(pos_);
+    }
     if (Tool::onMouseMove(pos)) {
         QPointF size = pos-beginPos();
         qreal r = sqrt(size.x()*size.x()+size.y()*size.y());
@@ -27,7 +38,12 @@ bool CircleTool::onMouseMove( const QPointF& pos ) {
     return false;
 }
 
-bool CircleTool::beginCreating(const QPointF &pos) {
+bool CircleTool::beginCreating(const QPointF &pos_) {
+    Body* b = scene()->activeBody();
+    QPointF pos = pos_;
+    if (b) {
+        pos = b->toLocal(pos_);
+    }
     Tool::beginCreating(pos);
     if (m_primitive)
         delete m_primitive;
@@ -36,7 +52,12 @@ bool CircleTool::beginCreating(const QPointF &pos) {
     return true;
 }
 
-void CircleTool::endCreating(const QPointF &pos) {
+void CircleTool::endCreating(const QPointF &pos_) {
+    Body* b = scene()->activeBody();
+    QPointF pos = pos_;
+    if (b) {
+        pos = b->toLocal(pos_);
+    }
     Tool::endCreating(pos);
     QPointF size = pos-beginPos();
     qreal r = sqrt(size.x()*size.x()+size.y()*size.y());

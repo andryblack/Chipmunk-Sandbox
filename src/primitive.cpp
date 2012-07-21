@@ -35,3 +35,8 @@ SceneTreeItem* Primitive::parent() const {
 void Primitive::select( bool s ) {
     if (m_body) m_body->selectPrimitive(this,s);
 }
+
+bool Primitive::selected() const {
+    if (m_body) return m_body->primitiveSelected(this);
+    return false;
+}

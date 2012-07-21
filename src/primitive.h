@@ -46,6 +46,7 @@ public:
     virtual SceneTreeItem* parent() const;
 
     virtual void select( bool s );
+    virtual bool selected() const;
 
     virtual void update() {}
 signals:

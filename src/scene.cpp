@@ -63,28 +63,19 @@ void Scene::setText(const QString &text) {
 }
 
 void Scene::Draw( const Canvas* canvas, QPainter* painter) const {
-    m_static_body->Draw( canvas, painter, m_selected );
+    m_static_body->Draw( canvas, painter );
     foreach( Body* b, m_bodys) {
-        b->Draw( canvas, painter, m_selected );
+        b->Draw( canvas, painter );
     }
 }
 
-void Scene::DrawSelected( const Canvas* canvas, QPainter* painter) const {
-    foreach( Primitive* p, m_selected) {
-        Body* b = p->body();
-        if ( b ) {
-            b->Draw( canvas, painter, p );
-        }
-    }
-}
-
-void Scene::DrawMarkers( const Canvas* canvas, QPainter* painter) const {
-    if (m_selected.size()==1) {
-        m_selected.front()->DrawMarkers(canvas,painter);
-    }
-}
 
 Primitive* Scene::getPrimitiveAtPoint(const QPointF &pnt) {
+    Body* b = activeBody();
+    if (b) {
+        Primitive* p = b->getPrimitiveAtPoint(pnt);
+        if (p) return p;
+    }
     Primitive* p = m_static_body->getPrimitiveAtPoint(pnt);
     if (p) return p;
 
@@ -158,6 +149,10 @@ Primitive* Scene::selected() const {
     if (m_selected.size()==1)
         return m_selected.front();
     return 0;
+}
+
+bool Scene::selected(const Primitive* p) const {
+    return qFind(m_selected.constBegin(),m_selected.constEnd(),p)!=m_selected.constEnd();
 }
 
 void Scene::update() {

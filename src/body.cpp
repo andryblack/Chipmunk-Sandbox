@@ -1,10 +1,14 @@
 #include "body.h"
 #include "scene.h"
 #include "primitive.h"
+#include "canvas.h"
 #include <QPainter>
+#include <QTransform>
 
 Body::Body(Scene* scene,const QString& name,QObject *parent) :
-    SceneTreeItem(parent),m_scene(scene)
+    SceneTreeItem(parent),m_scene(scene),
+    m_position(0,0),
+    m_angle(0)
 {
     setObjectName(name);
 }
@@ -58,7 +62,8 @@ void Body::removePrimitive(Primitive* p) {
     emit changed();
 }
 
-Primitive* Body::getPrimitiveAtPoint(const QPointF &pnt) {
+Primitive* Body::getPrimitiveAtPoint(const QPointF &pnt_) {
+    QPointF pnt = toLocal(pnt_);
     foreach( Primitive* p, m_primitives) {
         if ( p->isPointInside(pnt) )
             return p;
@@ -86,21 +91,51 @@ void Body::selectPrimitive( Primitive* p , bool select) {
     }
 }
 
-void Body::Draw( const Canvas* canvas , QPainter* painter, const QList<Primitive*>& selected ) const {
-    qreal opc = painter->opacity();
-    if (!active())
-        painter->setOpacity(opc * 0.3);
-    foreach ( Primitive* p, m_primitives ) {
-        if (selected.indexOf(p)==-1) {
-            p->Draw( canvas, painter );
-        }
-    }
-    painter->setOpacity(opc);
+bool Body::primitiveSelected( const Primitive* p) const {
+    return m_scene->selected(p);
 }
 
-void Body::Draw( const Canvas* canvas , QPainter* painter, const Primitive* selected ) const {
-    selected->Draw(canvas,painter);
+QPointF Body::toLocal( const QPointF& p ) const {
+    QTransform transform;
+    //transform.translate(-position().x(),-position().y());
+    transform.rotateRadians(-angle());
+    return transform.map(p-position());
 }
+QPointF Body::fromLocal( const QPointF& p ) const {
+    QTransform transform;
+    transform.translate(position().x(),position().y());
+    transform.rotateRadians(-angle());
+    return transform.map(p);
+}
+
+void Body::Draw( const Canvas* canvas , QPainter* painter ) const {
+    qreal opc = painter->opacity();
+    canvas->BeginDraw(this,painter);
+    if (!active())
+        painter->setOpacity(opc * 0.3);
+    QList<Primitive*> selected;
+    foreach ( Primitive* p, m_primitives ) {
+        if (m_scene->selected(p))
+            selected.push_back(p);
+        else
+            p->Draw(canvas,painter);
+    }
+    if (!selected.empty()) {
+        painter->setPen(QColor(255,64,64));
+        painter->setBrush(QBrush(QColor(255,255,255,64)));
+
+        foreach ( Primitive* p, selected ) {
+            p->Draw(canvas,painter);
+        }
+        if ( selected.size()==1 && selected.front()==m_scene->selected() ) {
+            painter->setBrush(QBrush(QColor(0,0,0,64)));
+            painter->setPen(QColor(255,255,255,128));
+            selected.front()->DrawMarkers(canvas,painter);
+        }
+    }
+    canvas->EndDraw(this,painter);
+}
+
 
 StaticBody::StaticBody(Scene* scene,const QString &name, QObject *parent) :
     Body(scene,name,parent) {
@@ -119,10 +154,8 @@ DynamicBody::DynamicBody(Scene* scene,const QString& name,QObject* parent) :
     Body(scene,name,parent),
     m_mass(1),
     m_moment(1),
-    m_position(0,0),
     m_velocity(0,0),
     m_force(0,0),
-    m_angle(0),
     m_angle_vel(0),
     m_torque(0),
     m_vel_limit(0),
@@ -130,11 +163,10 @@ DynamicBody::DynamicBody(Scene* scene,const QString& name,QObject* parent) :
 
 }
 
-void DynamicBody::Draw( const Canvas* canvas , QPainter* painter, const QList<Primitive*>& selected ) const {
-    Body::Draw(canvas,painter,selected);
-}
-void DynamicBody::Draw( const Canvas* canvas , QPainter* painter, const Primitive* selected ) const {
-    Body::Draw(canvas,painter,selected);
+
+void DynamicBody::Draw( const Canvas* canvas , QPainter* painter ) const {
+    canvas->Draw(this,painter);
+    Body::Draw(canvas,painter);
 }
 
 QString DynamicBody::iconFile() const {

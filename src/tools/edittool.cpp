@@ -3,6 +3,7 @@
 #include "../primitive.h"
 #include "../commands/moveprimitivecommand.h"
 #include "../primitivemarker.h"
+#include "../body.h"
 
 EditTool::EditTool(Scene *scene,QObject *parent) :
     Tool(scene,parent)
@@ -18,9 +19,14 @@ void EditTool::Activate() {
     m_moved = false;
 }
 
-bool EditTool::onMousePress( const QPointF& pos ) {
+bool EditTool::onMousePress( const QPointF& pos_ ) {
     m_selected = scene()->selected();
+    Body* b = scene()->activeBody();
+    QPointF pos = pos_;
     if (m_selected) {
+        if (b) {
+            pos = b->toLocal(pos_);
+        }
         PrimitiveMarker* marker = m_selected->getMarkerAtPoint(pos);
         if (marker) {
             m_start_pos = marker->position();
@@ -32,7 +38,11 @@ bool EditTool::onMousePress( const QPointF& pos ) {
         }
     }
     m_selected_marker = 0;
+    pos = pos_;
     Primitive* primitive = scene()->getPrimitiveAtPoint( pos );
+    if (b) {
+        pos = b->toLocal(pos_);
+    }
     if (primitive) {
         scene()->setSelected( primitive );
         m_start_pos = primitive->position();
@@ -46,8 +56,14 @@ bool EditTool::onMousePress( const QPointF& pos ) {
     return true;
 }
 
-bool EditTool::onMouseMove(const QPointF &pos) {
+bool EditTool::onMouseMove(const QPointF &pos_) {
     if (m_selected) {
+        QPointF pos = pos_;
+        Body* b = scene()->activeBody();
+        if (b) {
+            pos = b->toLocal(pos_);
+        }
+
         if ( m_selected_marker ) {
             m_selected_marker->move( pos+m_offset );
         } else {
@@ -60,9 +76,14 @@ bool EditTool::onMouseMove(const QPointF &pos) {
     return false;
 }
 
-bool EditTool::onMouseRelease(const QPointF &pos) {
+bool EditTool::onMouseRelease(const QPointF &pos_) {
     if (m_selected) {
        {
+            QPointF pos = pos_;
+            Body* b = scene()->activeBody();
+            if (b) {
+                pos = b->toLocal(pos_);
+            }
             if ( m_selected_marker ) {
                 m_selected_marker->move(pos+m_offset);
                 m_selected_marker->complete(scene());
