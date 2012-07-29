@@ -64,6 +64,7 @@ private:
     bool    m_drawGrid;
     int     m_gridSize;
     bool    m_snapToGrid;
+    int     m_border;
     void processPos(QPointF& pos) const;
     QPointF m_last_mouse_pos;
 };

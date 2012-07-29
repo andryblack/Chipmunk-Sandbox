@@ -21,7 +21,7 @@ Canvas::Canvas(QWidget *parent) :
     m_drawGrid = true;
     m_gridSize = 10;
     m_snapToGrid = false;
-
+    m_border = 64;
 }
 
 void Canvas::init(Tools* tools,Scene* scene) {
@@ -40,7 +40,7 @@ void Canvas::onZoomChanged() {
 
 QSize   Canvas::size() const {
     const QSizeF& sz = m_scene->worldSize();
-    return QSize( sz.width()*zoom(), sz.height()*zoom() );
+    return QSize( sz.width()*zoom()+m_border*2, sz.height()*zoom()+m_border*2 );
 }
 
 qreal Canvas::zoom() const {
@@ -68,24 +68,31 @@ void Canvas::setSnapToGrid(bool snap) {
 
 void Canvas::paintEvent(QPaintEvent *) {
     QPainter painter(this);
+    QSizeF sz = m_scene->worldSize();
     painter.fillRect(rect(),Qt::black);
+    painter.fillRect(0,0,width(),m_border,Qt::lightGray);
+    painter.fillRect(0,m_border,m_border,height()-m_border*2,Qt::lightGray);
+    painter.fillRect(width()-m_border,m_border,m_border,height()-m_border*2,Qt::lightGray);
+    painter.fillRect(0,height()-m_border,width(),m_border,Qt::lightGray);
 
+    painter.setTransform(QTransform().translate(m_border,m_border));
     qreal z = zoom();
+    sz*=z;
     if (m_drawGrid) {
         painter.setPen(QColor(32,32,32));
         //painter.setPen(QPen(QBrush(QColor(42,42,42)),1,Qt::DotLine));
-        for (int x=m_gridSize*z;x<width();x+=m_gridSize*z*2) {
-            painter.drawLine(x,0,x,height());
+        for (int x=m_gridSize*z;x<sz.width();x+=m_gridSize*z*2) {
+            painter.drawLine(x,0,x,sz.height()-1);
         }
-        for (int y=m_gridSize*z;y<height();y+=m_gridSize*z*2) {
-            painter.drawLine(0,y,width(),y);
+        for (int y=m_gridSize*z;y<sz.height();y+=m_gridSize*z*2) {
+            painter.drawLine(0,y,sz.width()-1,y);
         }
         painter.setPen(QColor(42,42,42));
-        for (int x=m_gridSize*z*2;x<width();x+=m_gridSize*z*2) {
-            painter.drawLine(x,0,x,height());
+        for (int x=m_gridSize*z*2;x<sz.width();x+=m_gridSize*z*2) {
+            painter.drawLine(x,0,x,sz.height()-1);
         }
-        for (int y=m_gridSize*z*2;y<height();y+=m_gridSize*z*2) {
-            painter.drawLine(0,y,width(),y);
+        for (int y=m_gridSize*z*2;y<sz.height();y+=m_gridSize*z*2) {
+            painter.drawLine(0,y,sz.width()-1,y);
         }
     }
 
@@ -250,6 +257,7 @@ void Canvas::Draw(const RotatePrimitiveMarker* marker, QPainter* painter) const 
 }
 
 void Canvas::processPos(QPointF& pos) const {
+    pos-=QPointF(m_border,m_border);
     pos*=(1.0f/zoom());
     if (m_snapToGrid) {
         qreal x = round(pos.x()/m_gridSize) * m_gridSize;
