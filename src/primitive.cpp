@@ -6,6 +6,10 @@
 Primitive::Primitive(Body* scene,QObject *parent) :
     SceneTreeItem(parent), m_body(scene)
 {
+    m_friction = 1.0;
+    m_elasticity = 1.0;
+    m_sensor = false;
+    m_collisionType = 0;
 }
 
 Body*  Primitive::body() {

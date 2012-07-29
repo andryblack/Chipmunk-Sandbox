@@ -20,11 +20,17 @@ void CirclePrimitive::updateText() {
 
 void CirclePrimitive::setR( qreal r) {
     m_r = r;
+    emit propertyChanged();
     updateText();
+}
+
+void   CirclePrimitive::setPosition( const QPointF& pos ) {
+    move(pos);
 }
 
 void CirclePrimitive::move( const QPointF& pos ) {
     m_pos = pos;
+    emit propertyChanged();
     updateText();
 }
 

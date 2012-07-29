@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   PropertyBrowser.cpp
  * Author: mark
  * 
@@ -59,11 +59,24 @@ void PropertyBrowser::setSelectedObjects(const QList<SceneTreeItem *> objs)
     for(int i = 0; i < objs.first()->metaObject()->propertyCount(); ++i) { // FIXME: this loop takes ~250 ms for 18 properties
         QMetaProperty metaProperty(objs.first()->metaObject()->property(i));
         if(metaProperty.isDesignable()) {
-            QtProperty *property = m_variantManager->addProperty(metaProperty.type(), humanize(metaProperty.name()));
-            property->setEnabled(metaProperty.isWritable());
-            m_propertyMap[property] = metaProperty.name();
-            addProperty(property);
-            setExpanded(topLevelItem(property), false);
+            int type = metaProperty.type();
+            if (metaProperty.isFlagType()) {
+                type = m_variantManager->flagTypeId();
+            }
+            QtVariantProperty *property = m_variantManager->addProperty(type, humanize(metaProperty.name()));
+            if (property) {
+                if (property->propertyType()==m_variantManager->flagTypeId()) {
+                    QMetaEnum enm = metaProperty.enumerator();
+                    QStringList sl;
+                    for (int i=0;i<enm.keyCount();++i)
+                        sl.append(enm.key(i));
+                    property->setAttribute("flagNames",sl);
+                }
+                property->setEnabled(metaProperty.isWritable());
+                m_propertyMap[property] = metaProperty.name();
+                addProperty(property);
+                setExpanded(topLevelItem(property), false);
+            }
         }
     }
     foreach(SceneTreeItem *obj, m_selectedObjects) {

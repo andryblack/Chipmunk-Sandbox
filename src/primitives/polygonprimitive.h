@@ -11,6 +11,8 @@ class PolygonPrimitiveMarker;
 class PolygonPrimitive : public Primitive
 {
     Q_OBJECT
+    Q_PROPERTY(QPointF  position    READ position   WRITE move   )
+
 public:
     explicit PolygonPrimitive(Body *body,const QPointF& pos,QObject *parent = 0);
     

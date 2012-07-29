@@ -117,6 +117,7 @@ void    PolygonPrimitive::addPoint( const QPointF& pos ) {
     m_points.push_back( pos );
     m_corner_markers.push_back(new PolygonPrimitiveMarker(this,m_points.size()-1));
     m_corner_markers.back()->setParent( this );
+    emit propertyChanged();
     updateText();
 }
 
@@ -126,6 +127,7 @@ void    PolygonPrimitive::removeLast() {
         delete m_corner_markers.back();
         m_corner_markers.pop_back();
     }
+    emit propertyChanged();
     updateText();
 }
 
@@ -138,6 +140,7 @@ void    PolygonPrimitive::removePoint(int index) {
             m_corner_markers[i]->setIndex(i);
         }
     }
+    emit propertyChanged();
     updateText();
 }
 
@@ -149,12 +152,14 @@ void    PolygonPrimitive::addPoint( int index, const QPointF& pos) {
             m_corner_markers[i]->setIndex(i);
         }
     }
+    emit propertyChanged();
     updateText();
 }
 
 void    PolygonPrimitive::moveLastPoint( const QPointF& pos ) {
     if (!m_points.empty()) {
         m_points.back() = pos ;
+        emit propertyChanged();
         updateText();
     }
 }
@@ -162,6 +167,7 @@ void    PolygonPrimitive::moveLastPoint( const QPointF& pos ) {
 void    PolygonPrimitive::movePoint( int index, const QPointF& pos ) {
     if (index<m_points.size()) {
         m_points[index] = pos;
+        emit propertyChanged();
         updateText();
     }
 }
@@ -169,6 +175,7 @@ void    PolygonPrimitive::movePoint( int index, const QPointF& pos ) {
 void PolygonPrimitive::move( const QPointF& pos ) {
     QPointF delta = pos - position();
     m_points.translate(delta);
+    emit propertyChanged();
     updateText();
 }
 

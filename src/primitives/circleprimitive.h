@@ -6,6 +6,9 @@
 class CirclePrimitive : public PrimitiveWithStaticMarkers
 {
     Q_OBJECT
+    Q_PROPERTY(QPointF  position    READ position   WRITE setPosition   )
+    Q_PROPERTY(qreal    radius    READ r   WRITE setR   )
+
 public:
     explicit CirclePrimitive(Body *body,const QPointF& pos,qreal r,QObject *parent = 0);
     
@@ -16,6 +19,7 @@ public:
 
     virtual bool isPointInside( const QPointF& pos) const;
     virtual QPointF position() const { return m_pos; }
+    void   setPosition( const QPointF& pos );
     virtual void move( const QPointF& pos );
 
     virtual QString iconFile() const { return ":/icons/circle.png"; }
