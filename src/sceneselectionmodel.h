@@ -9,7 +9,7 @@ class SceneSelectionModel : public QItemSelectionModel
 {
     Q_OBJECT
 public:
-    explicit SceneSelectionModel( Scene* scene, QAbstractItemModel * model,QObject *parent = 0);
+    explicit SceneSelectionModel( Scene* scene, QObject *parent = 0);
     
 signals:
     void selectByThree();

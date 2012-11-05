@@ -15,6 +15,10 @@ public:
     History(QObject* parent=0);
     ~History();
 
+    void clear();
+    bool haveUnsavedChanges() const;
+    void markSaved();
+
     bool undoAvaliable() const;
     QString undoText() const;
     bool redoAvaliable() const;
@@ -30,6 +34,7 @@ public slots:
 private:
     QList<Command*> m_undo_list;
     QList<Command*> m_redo_list;
+    Command*    m_last_saved;
 };
 
 #endif // HISTORY_H

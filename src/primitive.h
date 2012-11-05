@@ -24,6 +24,9 @@ class Primitive : public SceneTreeItem
     Q_PROPERTY(CollisionTypeBits   collisionType    READ collisionType   WRITE setCollisionType  )
 
 public:
+
+    static Primitive* create(const QString& type,Body* body,QObject *parent);
+
     enum CollisionTypeBit {
         Bit0 = 1 << 0,
         Bit1 = 1 << 1,

@@ -14,6 +14,29 @@ PolygonPrimitive::PolygonPrimitive(Body *body,const QPointF& pos,QObject *parent
     updateText();
 }
 
+QString PolygonPrimitive::pointsStr() const {
+    QString res;
+    for (int i=0;i<m_points.size();i++) {
+        QPointF d = m_points[i];
+        if (!res.isEmpty()) {
+            res += ":";
+        }
+        res+=QString::number(d.x())+";"+QString::number(d.y());
+    }
+    return res;
+}
+
+void PolygonPrimitive::setPoints(const QString& str) {
+    m_points.clear();
+    m_corner_markers.clear();
+    QStringList pts = str.split(':');
+    foreach (QString s,pts) {
+        QStringList pt = s.split(';');
+        addPoint(QPointF(pt.first().toDouble(),pt.last().toDouble()));
+    }
+    emit propertyChanged();
+    updateText();
+}
 
 void PolygonPrimitive::updateText() {
     QString str = QString("Polygon (%1,%2) [pnts:%3]")

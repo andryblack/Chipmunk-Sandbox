@@ -12,6 +12,7 @@ class PolygonPrimitive : public Primitive
 {
     Q_OBJECT
     Q_PROPERTY(QPointF  position    READ position   WRITE move   )
+    Q_PROPERTY(QString  points    READ pointsStr   WRITE setPoints  DESIGNABLE false )
 
 public:
     explicit PolygonPrimitive(Body *body,const QPointF& pos,QObject *parent = 0);
@@ -51,6 +52,9 @@ public:
 
     void update();
     const Diagonals& diagonals() const { return m_diagonals; }
+
+    QString pointsStr() const;
+    void setPoints(const QString& str);
 signals:
     
 public slots:

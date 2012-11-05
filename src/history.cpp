@@ -1,17 +1,37 @@
 #include "history.h"
 #include "command.h"
 
-History::History( QObject* object) : QObject(object)
+History::History( QObject* object) : QObject(object), m_last_saved(0)
 {
 }
 
 History::~History() {
+    clear();
+}
+
+void History::clear() {
     foreach( Command* cmd,m_undo_list) {
         delete cmd;
     }
     foreach( Command* cmd,m_redo_list) {
         delete cmd;
     }
+    m_undo_list.clear();
+    m_redo_list.clear();
+    m_last_saved = 0;
+    emit changed();
+}
+
+bool History::haveUnsavedChanges() const {
+    if (m_undo_list.empty())
+        return false;
+    if (m_last_saved==0)
+        return true;
+    return m_undo_list.back() != m_last_saved;
+}
+
+void History::markSaved() {
+    m_last_saved = m_undo_list.empty() ? 0 : m_undo_list.back();
 }
 
 bool History::undoAvaliable() const {

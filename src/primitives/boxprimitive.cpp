@@ -87,7 +87,9 @@ void BoxPrimitive::setPosition( const QPointF& pos ) {
 }
 
 void BoxPrimitive::setSize( const QSizeF& size ) {
+    QPointF pos = m_rect.center();
     m_rect.setSize(size);
+    m_rect.moveCenter(pos);
     emit propertyChanged();
     updateText();
 }
@@ -112,6 +114,7 @@ bool BoxPrimitive::setTopRight(const QPointF &pos) {
     QPointF newPos = transformPoint(QPointF(p.x()+d.x()/2,p.y()+d.y()/2));
     m_rect.setTopRight(pos);
     m_rect.moveCenter(newPos);
+    emit propertyChanged();
     updateText();
     return true;
 }
@@ -124,6 +127,7 @@ bool BoxPrimitive::setBottomRight( const QPointF& pos ) {
     QPointF newPos = transformPoint(QPointF(p.x()+d.x()/2,p.y()+d.y()/2));
     m_rect.setBottomRight(pos);
     m_rect.moveCenter(newPos);
+    emit propertyChanged();
     updateText();
     return true;
 }
@@ -136,6 +140,7 @@ bool BoxPrimitive::setBottomLeft(const QPointF &pos) {
     QPointF newPos = transformPoint(QPointF(p.x()+d.x()/2,p.y()+d.y()/2));
     m_rect.setBottomLeft(pos);
     m_rect.moveCenter(newPos);
+    emit propertyChanged();
     updateText();
     return true;
 }
@@ -147,6 +152,7 @@ bool    BoxPrimitive::setRight( qreal r ) {
     QPointF newPos = transformPoint(QPointF(pos.x()+d/2,pos.y()));
     m_rect.setRight(r);
     m_rect.moveCenter(newPos);
+    emit propertyChanged();
     updateText();
     return true;
 }
@@ -158,6 +164,7 @@ bool    BoxPrimitive::setLeft(qreal l) {
     QPointF newPos = transformPoint(QPointF(pos.x()+d/2,pos.y()));
     m_rect.setLeft(l);
     m_rect.moveCenter(newPos);
+    emit propertyChanged();
     updateText();
     return true;
 }
@@ -169,6 +176,7 @@ bool    BoxPrimitive::setTop(qreal t) {
     QPointF newPos = transformPoint(QPointF(pos.x(),pos.y()+d/2));
     m_rect.setTop(t);
     m_rect.moveCenter(newPos);
+    emit propertyChanged();
     updateText();
     return true;
 }
@@ -180,11 +188,13 @@ bool    BoxPrimitive::setBottom(qreal b) {
     QPointF newPos = transformPoint(QPointF(pos.x(),pos.y()+d/2));
     m_rect.setBottom(b);
     m_rect.moveCenter(newPos);
+    emit propertyChanged();
     updateText();
     return true;
 }
 
 void    BoxPrimitive::rotate( qreal a ) {
     m_angle = a;
+    emit propertyChanged();
     updateText();
 }

@@ -11,7 +11,6 @@ SOURCES += $$PWD/main.cpp\
     $$PWD/command.cpp \
     $$PWD/history.cpp \
     $$PWD/primitivemarker.cpp \
-    $$PWD/scenetreemodel.cpp \
     $$PWD/scenetreeitem.cpp \
     $$PWD/body.cpp \
     $$PWD/sceneselectionmodel.cpp \
@@ -47,7 +46,6 @@ HEADERS  += $$PWD/mainwindow.h \
     $$PWD/command.h \
     $$PWD/history.h \
     $$PWD/primitivemarker.h \
-    $$PWD/scenetreemodel.h \
     $$PWD/scenetreeitem.h \
     $$PWD/body.h \
     $$PWD/sceneselectionmodel.h \

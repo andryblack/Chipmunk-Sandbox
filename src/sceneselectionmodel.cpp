@@ -4,23 +4,26 @@
 #include "primitive.h"
 #include "body.h"
 
-SceneSelectionModel::SceneSelectionModel(Scene* scene, QAbstractItemModel *model, QObject *parent) :
-    QItemSelectionModel(model,parent),m_scene(scene)
+SceneSelectionModel::SceneSelectionModel(Scene* scene, QObject *parent) :
+    QItemSelectionModel(scene,parent),m_scene(scene)
 {
     connect( m_scene,SIGNAL(selectionChanged()),this,SLOT(onSceneSelectionChanged()));
+    connect( m_scene,SIGNAL(selectionReset()),this,SLOT(reset()));
 }
 
 
 void	SceneSelectionModel::select ( const QModelIndex & index, QItemSelectionModel::SelectionFlags command ) {
     emit selectByThree();
-
-    SceneTreeItem* item = static_cast<SceneTreeItem*>(index.internalPointer());
-    if (command&Select) {
-        item->select(true);
-    } else if (command&Deselect) {
-        item->select(false);
+    if (index.isValid()) {
+        SceneTreeItem* item = static_cast<SceneTreeItem*>(index.internalPointer());
+        if (command&Select) {
+            item->select(true);
+        } else if (command&Deselect) {
+            item->select(false);
+        }
     }
 }
+
 
 void SceneSelectionModel::select(const QItemSelection &selection, QItemSelectionModel::SelectionFlags command) {
     emit selectByThree();
@@ -30,11 +33,13 @@ void SceneSelectionModel::select(const QItemSelection &selection, QItemSelection
         m_scene->clearSelection();
     }
     foreach ( const QModelIndex & index, indexes ) {
-        SceneTreeItem* item = static_cast<SceneTreeItem*>(index.internalPointer());
-        if (command&Select) {
-            item->select(true);
-        } else if (command&Deselect) {
-            item->select(false);
+        if (index.isValid()) {
+            SceneTreeItem* item = static_cast<SceneTreeItem*>(index.internalPointer());
+            if (command&Select) {
+                item->select(true);
+            } else if (command&Deselect) {
+                item->select(false);
+            }
         }
     }
     QItemSelectionModel::select(selection,command);

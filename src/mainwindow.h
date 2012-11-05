@@ -41,6 +41,14 @@ private slots:
 
     void on_toolButtonAddStaticBody_clicked();
 
+    void on_actionOpen_triggered();
+
+    void on_actionNew_triggered();
+
+    void on_actionSave_as_triggered();
+
+    void on_actionSave_triggered();
+
 private:
     Ui::MainWindow *ui;
     Tools*  m_tools;
@@ -48,8 +56,10 @@ private:
     Scene*  m_scene;
     History*    m_history;
     QVector<QAction*> m_tools_actions;
-    SceneTreeModel* m_scene_model;
     SceneSelectionModel*    m_scene_selection;
+    bool saveIfNeeded();
+    void saveScene();
+    bool askSave();
 };
 
 #endif // MAINWINDOW_H

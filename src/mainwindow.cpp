@@ -14,6 +14,10 @@
 #include "body.h"
 #include "commands/createbodycommand.h"
 
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QCloseEvent>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -89,9 +93,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_tools,SIGNAL(changed()),this,SLOT(onToolChanged()));
     onToolChanged();
 
-    m_scene_model = new SceneTreeModel(m_scene,this);
-    ui->treeView->setModel(m_scene_model);
-    m_scene_selection = new SceneSelectionModel(m_scene,m_scene_model,this);
+    ui->treeView->setModel(m_scene);
+    m_scene_selection = new SceneSelectionModel(m_scene,this);
     ui->treeView->setSelectionModel(m_scene_selection);
     connect(m_scene_selection,SIGNAL(selectByThree()),m_tools,SLOT(activateEditTool()));
 
@@ -99,11 +102,24 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_scene,SIGNAL(changed()),this,SLOT(onSceneChanged()));
     connect(m_scene_selection,SIGNAL(selectionChanged(QItemSelection,QItemSelection)),this,SLOT(onSceneSelectionChanged()));
 
+    QString lastFile = settings.value("lastFile").toString();
+    if (lastFile.isEmpty()) {
+       m_scene->makeNew(QSize(800,600));
+    } else {
+       m_scene->load(lastFile);
+    }
 }
 
 
 void MainWindow::closeEvent(QCloseEvent *event)
  {
+    if (m_history->haveUnsavedChanges()) {
+        if (!askSave()) {
+           event->ignore();
+           return;
+        }
+    }
+
      QSettings settings;
      settings.setValue("geometry", saveGeometry());
      settings.setValue("splitter",ui->splitter->saveState());
@@ -112,6 +128,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
      settings.setValue("grid_draw",ui->actionGrid_draw->isChecked());
      settings.setValue("grid_snap",ui->actionGrid_snap->isChecked());
      settings.setValue("zoom",m_scene->zoom());
+     settings.setValue("lastFile",m_scene->fileName());
      QMainWindow::closeEvent(event);
  }
 
@@ -189,8 +206,19 @@ void MainWindow::onSceneTextChanged() {
 }
 
 void MainWindow::onSceneChanged() {
-    m_scene_model->update();
-    ui->canvasWidget->repaint();
+    //m_scene_model->update();
+    ui->canvasWidget->onZoomChanged();
+    QString doc = m_scene->fileName();
+    if (doc.isEmpty()) {
+        doc = "untitled";
+    }
+    if (m_history->haveUnsavedChanges()) {
+        doc = "*" + doc;
+        ui->actionSave->setEnabled(true);
+    } else {
+        ui->actionSave->setEnabled(false);
+    }
+    setWindowTitle(doc);
 }
 
 void MainWindow::onSceneSelectionChanged() {
@@ -254,4 +282,76 @@ void MainWindow::on_toolButtonAddStaticBody_clicked()
 {
     Body* b = new StaticBody(m_scene,"static",m_scene);
     m_scene->execCommand( new CreateBodyCommand(b,m_scene) );
+}
+
+bool MainWindow::askSave() {
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Unsaved");
+    msgBox.setText(m_scene->fileName());
+    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setInformativeText("File not saved");
+    msgBox.setStandardButtons(QMessageBox::Discard | QMessageBox::Save | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Save);
+    int ret = msgBox.exec();
+     switch (ret) {
+       case QMessageBox::Save:
+           saveScene();
+           return true;
+           break;
+       case QMessageBox::Discard:
+           return true;
+           break;
+       default:
+           break;
+     }
+    return false;
+}
+
+bool MainWindow::saveIfNeeded() {
+    if (m_history->haveUnsavedChanges()) {
+        return askSave();
+    }
+    return true;
+}
+
+void MainWindow::saveScene() {
+    QString fn = m_scene->fileName();
+    if (fn.isEmpty()) {
+        on_actionSave_as_triggered();
+    } else {
+        m_scene->save();
+    }
+}
+
+void MainWindow::on_actionOpen_triggered()
+{
+    QString fn = QFileDialog::getOpenFileName(this, tr("Open File..."),
+        QString(), tr("Scene files (*.scene);;All Files (*)"));
+    if (!fn.isEmpty() && fn!=m_scene->fileName()) {
+        if (saveIfNeeded()) {
+            m_scene->load(fn);
+        }
+    }
+}
+
+void MainWindow::on_actionNew_triggered()
+{
+    if(saveIfNeeded()) {
+        m_scene->makeNew(m_scene->worldSize());
+    }
+}
+
+void MainWindow::on_actionSave_as_triggered()
+{
+    QString fn = QFileDialog::getSaveFileName(this, tr("Save as..."),
+                                                  QString(),
+                                              tr("Scene files (*.scene);;All Files (*)"));
+    if (fn.isEmpty())
+        return;
+    m_scene->save(fn);
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+    saveScene();
 }

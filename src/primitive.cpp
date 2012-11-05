@@ -2,6 +2,19 @@
 #include "canvas.h"
 #include "primitivemarker.h"
 #include "body.h"
+#include "primitives/boxprimitive.h"
+#include "primitives/circleprimitive.h"
+#include "primitives/polygonprimitive.h"
+
+Primitive* Primitive::create(const QString &type, Body *body, QObject *parent) {
+    if ( type == "BoxPrimitive" )
+        return new BoxPrimitive(body,QRectF(),parent);
+    if ( type == "CirclePrimitive" )
+        return new CirclePrimitive(body,QPointF(),0,parent);
+    if ( type == "PolygonPrimitive" )
+        return new PolygonPrimitive(body,QPointF(),parent);
+    return 0;
+}
 
 Primitive::Primitive(Body* scene,QObject *parent) :
     SceneTreeItem(parent), m_body(scene)

@@ -10,6 +10,7 @@ class BoxPrimitive : public PrimitiveWithStaticMarkers
     Q_OBJECT
     Q_PROPERTY(QPointF  position    READ position   WRITE setPosition   )
     Q_PROPERTY(QSizeF   size        READ size       WRITE setSize )
+    Q_PROPERTY(qreal    angle       READ angle      WRITE rotate )
 
 public:
     explicit BoxPrimitive(Body *body,const QRectF &rect , QObject *parent= 0);
