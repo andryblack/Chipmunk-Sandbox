@@ -5,6 +5,9 @@
 #include <QTransform>
 
 #include <cmath>
+#ifndef M_PI
+#define M_PI 3.14
+#endif
 
 BoxPrimitive::BoxPrimitive(Body *body,const QRectF& rect,QObject *parent) :
     PrimitiveWithStaticMarkers(body,parent), m_rect(rect), m_angle( 0 )

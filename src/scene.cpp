@@ -44,7 +44,7 @@ void ReadAttributes(QObject* obj,QDomElement& el) {
     QDomElement prop = el.firstChildElement("property");
     while (prop.isElement()) {
         QString propName = prop.attribute("name");
-        int propIndx = obj->metaObject()->indexOfProperty(propName.toAscii().constData());
+        int propIndx = obj->metaObject()->indexOfProperty(propName.toLatin1().constData());
         if (propIndx>=0 && propIndx<obj->metaObject()->propertyCount()) {
             QMetaProperty metaProperty(obj->metaObject()->property(propIndx));
             QString valueStr = prop.attribute("value");
@@ -301,7 +301,7 @@ Primitive* Scene::getPrimitiveAtPoint(const QPointF &pnt) {
 void Scene::clearSelection() {
     m_selected.clear();
     m_body_selected.clear();
-    m_active_body = 0;
+    //m_active_body = 0;
     emit selectionChanged();
 }
 

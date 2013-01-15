@@ -8,7 +8,6 @@
 #include "tools.h"
 #include "history.h"
 #include "scene.h"
-#include "scenetreemodel.h"
 #include "sceneselectionmodel.h"
 #include "primitive.h"
 #include "body.h"

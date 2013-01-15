@@ -13,8 +13,11 @@
 #include <QPainter>
 #include <QMouseEvent>
 
-#include <cmath>
 
+#include <cmath>
+#ifndef M_PI
+#define M_PI 3.14
+#endif
 Canvas::Canvas(QWidget *parent) :
     QWidget(parent), m_tools(0),m_scene(0)
 {
@@ -260,14 +263,14 @@ void Canvas::processPos(QPointF& pos) const {
     pos-=QPointF(m_border,m_border);
     pos*=(1.0f/zoom());
     if (m_snapToGrid) {
-        qreal x = round(pos.x()/m_gridSize) * m_gridSize;
-        qreal y = round(pos.y()/m_gridSize) * m_gridSize;
+        qreal x = floorf(pos.x()/m_gridSize) * m_gridSize;
+        qreal y = floorf(pos.y()/m_gridSize) * m_gridSize;
         pos.setX(x);
         pos.setY(y);
     }
 }
 void Canvas::mousePressEvent(QMouseEvent * event) {
-    QPointF p = event->posF();
+    QPointF p = event->localPos();
     processPos(p);
     m_last_mouse_pos = p;
     if (m_tools->onMousePress(p)) {
@@ -276,7 +279,7 @@ void Canvas::mousePressEvent(QMouseEvent * event) {
 }
 
 void Canvas::mouseReleaseEvent(QMouseEvent *event) {
-    QPointF p = event->posF();
+    QPointF p = event->localPos();
     processPos(p);
     m_last_mouse_pos = p;
     if (m_tools->onMouseRelease(p)) {
@@ -285,7 +288,7 @@ void Canvas::mouseReleaseEvent(QMouseEvent *event) {
 }
 
 void Canvas::mouseMoveEvent(QMouseEvent *event) {
-    QPointF p = event->posF();
+    QPointF p = event->localPos();
     processPos(p);
     m_last_mouse_pos = p;
     if (m_tools->onMouseMove(p)) {

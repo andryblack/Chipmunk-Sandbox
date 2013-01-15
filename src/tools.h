@@ -2,7 +2,6 @@
 #define TOOLS_H
 
 #include <QObject>
-#include <tr1/array>
 #include <QPointF>
 
 enum ToolType {
@@ -45,7 +44,7 @@ public slots:
 private:
     Scene*    m_scene;
     ToolType    m_active_tool;
-    std::tr1::array<Tool*,ToolTypesAmount>  m_tools;
+    Tool*  m_tools[ToolTypesAmount];
 };
 
 #endif // TOOLS_H

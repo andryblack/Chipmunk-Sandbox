@@ -34,7 +34,7 @@ QPointF CirclePrimitiveMarker::getOffset( const QPointF& pos ) const {
     return delta;
 }
 
-bool CirclePrimitiveMarker::CirclePrimitiveMarker::isPointInside( const QPointF& p) const {
+bool CirclePrimitiveMarker::isPointInside( const QPointF& p) const {
     QPointF delta = p - m_primitive->position();
     qreal len2 =  delta.x()*delta.x() + delta.y()*delta.y();
     qreal r = m_primitive->r();

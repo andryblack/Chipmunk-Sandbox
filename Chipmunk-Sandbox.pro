@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui xml
+QT       += core gui widgets xml
 
 TARGET = Chipmunk-Sandbox
 TEMPLATE = app

@@ -8,8 +8,8 @@
 #ifndef _PROPERTYBROWSER_H
 #define	_PROPERTYBROWSER_H
 
-#include <qtpropertybrowser/qttreepropertybrowser.h>
-#include <qtpropertybrowser/qtvariantproperty.h>
+#include <qttreepropertybrowser.h>
+#include <qtvariantproperty.h>
 #include "scenetreeitem.h"
 #include "history.h"
 
