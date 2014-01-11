@@ -40,11 +40,13 @@ bool EditTool::onMousePress( const QPointF& pos_ ) {
     m_selected_marker = 0;
     pos = pos_;
     Primitive* primitive = scene()->getPrimitiveAtPoint( pos );
-    if (b) {
-        pos = b->toLocal(pos_);
-    }
+
     if (primitive) {
         scene()->setSelected( primitive );
+        b = scene()->activeBody();
+        if (b) {
+            pos = b->toLocal(pos_);
+        }
         m_start_pos = primitive->position();
         m_offset = m_start_pos - pos;
     } else {

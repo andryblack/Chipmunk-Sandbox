@@ -350,7 +350,13 @@ void Scene::removeSelected(Body* p) {
 }
 
 void Scene::setActiveBody(Body *b) {
+    QModelIndex prevIdx = getBodyIndex(m_active_body);
     m_active_body = b;
+    QModelIndex newIdx = getBodyIndex(m_active_body);
+    if (prevIdx.isValid())
+        emit dataChanged(prevIdx,prevIdx,QVector<int>() << Qt::BackgroundRole << Qt::DecorationRole);
+    if (newIdx.isValid())
+        emit dataChanged(newIdx,newIdx,QVector<int>() << Qt::BackgroundRole << Qt::DecorationRole);
     emit changed();
 }
 
@@ -407,6 +413,13 @@ int Scene::bodyIndex( Body* b) const {
 
 
 
+QModelIndex Scene::getBodyIndex(Body *body)
+{
+    if (!body)
+        return QModelIndex();
+    return index(bodyIndex(body),0,QModelIndex());
+}
+
 //// scene tree model
 
 int Scene::columnCount(const QModelIndex &/*parent*/) const
@@ -434,6 +447,8 @@ int Scene::columnCount(const QModelIndex &/*parent*/) const
      if (role == Qt::BackgroundRole) {
          if ( static_cast<SceneTreeItem*>(index.internalPointer())->active() ) {
              return QBrush(QColor(0xFF,0xFE,0xA9));
+         } else {
+             return QBrush(Qt::white);
          }
      }
 

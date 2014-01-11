@@ -120,6 +120,8 @@ private:
     Body*   m_static_body;
 
     QString m_filename;
+
+    QModelIndex getBodyIndex(Body* body);
 };
 
 #endif // SCENE_H
