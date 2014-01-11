@@ -1199,12 +1199,6 @@ QtVariantPropertyManager::QtVariantPropertyManager(QObject *parent)
                 this, SLOT(slotPropertyInserted(QtProperty*,QtProperty*,QtProperty*)));
     connect(fontPropertyManager, SIGNAL(propertyRemoved(QtProperty*,QtProperty*)),
                 this, SLOT(slotPropertyRemoved(QtProperty*,QtProperty*)));
-    // CursorPropertyManager
-    QtCursorPropertyManager *cursorPropertyManager = new QtCursorPropertyManager(this);
-    d_ptr->m_typeToPropertyManager[QVariant::Cursor] = cursorPropertyManager;
-    d_ptr->m_typeToValueType[QVariant::Cursor] = QVariant::Cursor;
-    connect(cursorPropertyManager, SIGNAL(valueChanged(QtProperty*,QCursor)),
-                this, SLOT(slotValueChanged(QtProperty*,QCursor)));
     // FlagPropertyManager
     int flagId = flagTypeId();
     QtFlagPropertyManager *flagPropertyManager = new QtFlagPropertyManager(this);
@@ -1360,10 +1354,6 @@ QVariant QtVariantPropertyManager::value(const QtProperty *property) const
         return sizePolicyManager->value(internProp);
     } else if (QtFontPropertyManager *fontManager = qobject_cast<QtFontPropertyManager *>(manager)) {
         return fontManager->value(internProp);
-#ifndef QT_NO_CURSOR
-    } else if (QtCursorPropertyManager *cursorManager = qobject_cast<QtCursorPropertyManager *>(manager)) {
-        return cursorManager->value(internProp);
-#endif
     } else if (QtFlagPropertyManager *flagManager = qobject_cast<QtFlagPropertyManager *>(manager)) {
         return flagManager->value(internProp);
     }
@@ -1638,11 +1628,6 @@ void QtVariantPropertyManager::setValue(QtProperty *property, const QVariant &va
     } else if (QtFontPropertyManager *fontManager = qobject_cast<QtFontPropertyManager *>(manager)) {
         fontManager->setValue(internProp, qvariant_cast<QFont>(val));
         return;
-#ifndef QT_NO_CURSOR
-    } else if (QtCursorPropertyManager *cursorManager = qobject_cast<QtCursorPropertyManager *>(manager)) {
-        cursorManager->setValue(internProp, qvariant_cast<QCursor>(val));
-        return;
-#endif
     } else if (QtFlagPropertyManager *flagManager = qobject_cast<QtFlagPropertyManager *>(manager)) {
         flagManager->setValue(internProp, qvariant_cast<int>(val));
         return;
@@ -1863,7 +1848,6 @@ public:
     QtKeySequenceEditorFactory *m_keySequenceEditorFactory;
     QtCharEditorFactory        *m_charEditorFactory;
     QtEnumEditorFactory        *m_comboBoxFactory;
-    QtCursorEditorFactory      *m_cursorEditorFactory;
     QtColorEditorFactory       *m_colorEditorFactory;
     QtFontEditorFactory        *m_fontEditorFactory;
 
@@ -1974,10 +1958,6 @@ QtVariantEditorFactory::QtVariantEditorFactory(QObject *parent)
     d_ptr->m_charEditorFactory = new QtCharEditorFactory(this);
     d_ptr->m_factoryToType[d_ptr->m_charEditorFactory] = QVariant::Char;
     d_ptr->m_typeToFactory[QVariant::Char] = d_ptr->m_charEditorFactory;
-
-    d_ptr->m_cursorEditorFactory = new QtCursorEditorFactory(this);
-    d_ptr->m_factoryToType[d_ptr->m_cursorEditorFactory] = QVariant::Cursor;
-    d_ptr->m_typeToFactory[QVariant::Cursor] = d_ptr->m_cursorEditorFactory;
 
     d_ptr->m_colorEditorFactory = new QtColorEditorFactory(this);
     d_ptr->m_factoryToType[d_ptr->m_colorEditorFactory] = QVariant::Color;
@@ -2118,11 +2098,6 @@ void QtVariantEditorFactory::connectPropertyManager(QtVariantPropertyManager *ma
         d_ptr->m_checkBoxFactory->addPropertyManager(manager->subBoolPropertyManager());
     }
 
-    QList<QtCursorPropertyManager *> cursorPropertyManagers = manager->findChildren<QtCursorPropertyManager *>();
-    QListIterator<QtCursorPropertyManager *> itCursor(cursorPropertyManagers);
-    while (itCursor.hasNext())
-        d_ptr->m_cursorEditorFactory->addPropertyManager(itCursor.next());
-
     QList<QtFlagPropertyManager *> flagPropertyManagers = manager->findChildren<QtFlagPropertyManager *>();
     QListIterator<QtFlagPropertyManager *> itFlag(flagPropertyManagers);
     while (itFlag.hasNext())
@@ -2261,11 +2236,6 @@ void QtVariantEditorFactory::disconnectPropertyManager(QtVariantPropertyManager 
         d_ptr->m_comboBoxFactory->removePropertyManager(manager->subEnumPropertyManager());
         d_ptr->m_checkBoxFactory->removePropertyManager(manager->subBoolPropertyManager());
     }
-
-    QList<QtCursorPropertyManager *> cursorPropertyManagers = manager->findChildren<QtCursorPropertyManager *>();
-    QListIterator<QtCursorPropertyManager *> itCursor(cursorPropertyManagers);
-    while (itCursor.hasNext())
-        d_ptr->m_cursorEditorFactory->removePropertyManager(itCursor.next());
 
     QList<QtFlagPropertyManager *> flagPropertyManagers = manager->findChildren<QtFlagPropertyManager *>();
     QListIterator<QtFlagPropertyManager *> itFlag(flagPropertyManagers);

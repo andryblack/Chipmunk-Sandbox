@@ -326,27 +326,6 @@ private:
     Q_PRIVATE_SLOT(d_func(), void slotEditorDestroyed(QObject *))
 };
 
-class QtCursorEditorFactoryPrivate;
-
-class QtCursorEditorFactory : public QtAbstractEditorFactory<QtCursorPropertyManager>
-{
-    Q_OBJECT
-public:
-    QtCursorEditorFactory(QObject *parent = 0);
-    ~QtCursorEditorFactory();
-protected:
-    void connectPropertyManager(QtCursorPropertyManager *manager);
-    QWidget *createEditor(QtCursorPropertyManager *manager, QtProperty *property,
-                QWidget *parent);
-    void disconnectPropertyManager(QtCursorPropertyManager *manager);
-private:
-    QScopedPointer<QtCursorEditorFactoryPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(QtCursorEditorFactory)
-    Q_DISABLE_COPY(QtCursorEditorFactory)
-    Q_PRIVATE_SLOT(d_func(), void slotPropertyChanged(QtProperty *, const QCursor &))
-    Q_PRIVATE_SLOT(d_func(), void slotEnumChanged(QtProperty *, int))
-    Q_PRIVATE_SLOT(d_func(), void slotEditorDestroyed(QObject *))
-};
 
 class QtColorEditorFactoryPrivate;
 

@@ -713,33 +713,6 @@ private:
     Q_PRIVATE_SLOT(d_func(), void slotPropertyDestroyed(QtProperty *))
 };
 
-class QtCursorPropertyManagerPrivate;
-
-class QtCursorPropertyManager : public QtAbstractPropertyManager
-{
-    Q_OBJECT
-public:
-    QtCursorPropertyManager(QObject *parent = 0);
-    ~QtCursorPropertyManager();
-
-#ifndef QT_NO_CURSOR
-    QCursor value(const QtProperty *property) const;
-#endif
-
-public Q_SLOTS:
-    void setValue(QtProperty *property, const QCursor &val);
-Q_SIGNALS:
-    void valueChanged(QtProperty *property, const QCursor &val);
-protected:
-    QString valueText(const QtProperty *property) const;
-    QIcon valueIcon(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
-private:
-    QScopedPointer<QtCursorPropertyManagerPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(QtCursorPropertyManager)
-    Q_DISABLE_COPY(QtCursorPropertyManager)
-};
 
 QT_END_NAMESPACE
 
