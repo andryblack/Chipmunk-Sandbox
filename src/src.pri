@@ -19,6 +19,7 @@ SOURCES += $$PWD/main.cpp\
     $$PWD/tools/polygontool.cpp \
     $$PWD/tools/edittool.cpp \
     $$PWD/tools/boxtool.cpp \
+    $$PWD/tools/bodytool.cpp \
     $$PWD/primitives/boxprimitive.cpp \
     $$PWD/primitives/boxprimitivemarker.cpp \
     $$PWD/primitives/rotateprimitivemarker.cpp \
@@ -36,6 +37,7 @@ SOURCES += $$PWD/main.cpp\
     $$PWD/commands/movepolygonmarkercommand.cpp \
     $$PWD/commands/removepolygonpointcommand.cpp \
     $$PWD/commands/createpolygonpointcommand.cpp \
+    $$PWD/commands/movebodycommand.cpp
 
 HEADERS  += $$PWD/mainwindow.h \
     $$PWD/canvas.h \
@@ -54,6 +56,7 @@ HEADERS  += $$PWD/mainwindow.h \
     $$PWD/tools/circletool.h \
     $$PWD/tools/polygontool.h \
     $$PWD/tools/boxtool.h \
+    $$PWD/tools/bodytool.h \
     $$PWD/primitives/boxprimitive.h \
     $$PWD/primitives/boxprimitivemarker.h \
     $$PWD/primitives/rotateprimitivemarker.h \
@@ -70,7 +73,8 @@ HEADERS  += $$PWD/mainwindow.h \
     $$PWD/commands/removepolygonpointcommand.h \
     $$PWD/commands/createpolygonpointcommand.h \
     $$PWD/commands/properychangedcommand.h \
-    $$PWD/commands/createbodycommand.h
+    $$PWD/commands/createbodycommand.h \
+    $$PWD/commands/movebodycommand.h
 
 FORMS    += $$PWD/mainwindow.ui
 

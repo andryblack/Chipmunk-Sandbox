@@ -18,6 +18,7 @@ void PolygonTool::Activate() {
 }
 
 void PolygonTool::Draw(const Canvas* canvas,QPainter* painter) const {
+    if (!creating()) return;
     Body* b = scene()->activeBody();
     if (m_primitive) {
         if (b)

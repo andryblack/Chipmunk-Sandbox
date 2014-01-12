@@ -28,7 +28,7 @@ public:
     bool snapToGrid() const;
 
     void BeginDraw(const Body* body, QPainter* painter) const;
-    void Draw(const DynamicBody* body, QPainter* painter) const;
+    void Draw(const Body* body, QPainter* painter) const;
     void EndDraw(const Body* body, QPainter* painter) const;
 
     void Draw(const BoxPrimitive* box, QPainter* painter) const;

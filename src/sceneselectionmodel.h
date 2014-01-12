@@ -4,6 +4,7 @@
 #include <QItemSelectionModel>
 
 class Scene;
+class SceneTreeItem;
 
 class SceneSelectionModel : public QItemSelectionModel
 {
@@ -12,7 +13,7 @@ public:
     explicit SceneSelectionModel( Scene* scene, QObject *parent = 0);
     
 signals:
-    void selectByThree();
+    void selectByThree(SceneTreeItem* item);
 public slots:
     virtual void select( const QModelIndex & index, QItemSelectionModel::SelectionFlags command );
     virtual void select(const QItemSelection &selection, QItemSelectionModel::SelectionFlags command);

@@ -4,6 +4,7 @@
 #include "tools/boxtool.h"
 #include "tools/circletool.h"
 #include "tools/polygontool.h"
+#include "tools/bodytool.h"
 
 #include "scene.h"
 
@@ -14,8 +15,9 @@ Tools::Tools(Scene *scene,QObject *parent) :
     m_tools[ToolTypeBox] = new BoxTool(scene,this);
     m_tools[ToolTypeCircle] = new CircleTool(scene,this);
     m_tools[ToolTypePolygon] = new PolygonTool(scene,this);
+    m_tools[ToolTypeBody] = new BodyTool(scene,this);
 
-    m_active_tool = ToolTypeBox;
+    m_active_tool = ToolTypeEdit;
 }
 
 ToolType Tools::toolType() const {
@@ -42,8 +44,7 @@ bool Tools::onMouseRelease( const QPointF& pos ) {
 }
 
 void Tools::Draw(const Canvas* canvas,QPainter* painter) const {
-    if (ActiveTool()->creating())
-        ActiveTool()->Draw(canvas,painter);
+    ActiveTool()->Draw(canvas,painter);
 }
 
 void Tools::activateBoxTool() {
@@ -60,6 +61,11 @@ void Tools::activatePolygonTool() {
 
 void Tools::activateEditTool() {
     selectTool(ToolTypeEdit);
+}
+
+void Tools::activateBodyTool()
+{
+    selectTool(ToolTypeBody);
 }
 
 void Tools::selectTool( ToolType type ) {

@@ -110,9 +110,17 @@ QPointF Body::fromLocal( const QPointF& p ) const {
 
 void Body::Draw( const Canvas* canvas , QPainter* painter ) const {
     qreal opc = painter->opacity();
+
     canvas->BeginDraw(this,painter);
     if (!active())
         painter->setOpacity(opc * 0.3);
+    else {
+        painter->save();
+        painter->setPen(QColor(255,255,64,128));
+        painter->drawLine(0,-10,0,10);
+        painter->drawLine(-10,0,10,0);
+        painter->restore();
+    }
     QList<Primitive*> selected;
     foreach ( Primitive* p, m_primitives ) {
         if (m_scene->selected(p))
@@ -165,7 +173,6 @@ DynamicBody::DynamicBody(Scene* scene,const QString& name,QObject* parent) :
 
 
 void DynamicBody::Draw( const Canvas* canvas , QPainter* painter ) const {
-    canvas->Draw(this,painter);
     Body::Draw(canvas,painter);
 }
 

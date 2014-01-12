@@ -13,10 +13,13 @@ SceneSelectionModel::SceneSelectionModel(Scene* scene, QObject *parent) :
 
 
 void	SceneSelectionModel::select ( const QModelIndex & index, QItemSelectionModel::SelectionFlags command ) {
-    emit selectByThree();
     if (index.isValid()) {
+
         SceneTreeItem* item = static_cast<SceneTreeItem*>(index.internalPointer());
+
         if (command&Select) {
+            emit selectByThree(item);
+
             item->select(true);
         } else if (command&Deselect) {
             item->select(false);
@@ -26,7 +29,6 @@ void	SceneSelectionModel::select ( const QModelIndex & index, QItemSelectionMode
 
 
 void SceneSelectionModel::select(const QItemSelection &selection, QItemSelectionModel::SelectionFlags command) {
-    emit selectByThree();
 
     QModelIndexList indexes = selection.indexes();
     if (command&Clear) {
@@ -36,6 +38,8 @@ void SceneSelectionModel::select(const QItemSelection &selection, QItemSelection
         if (index.isValid()) {
             SceneTreeItem* item = static_cast<SceneTreeItem*>(index.internalPointer());
             if (command&Select) {
+                emit selectByThree(item);
+
                 item->select(true);
             } else if (command&Deselect) {
                 item->select(false);

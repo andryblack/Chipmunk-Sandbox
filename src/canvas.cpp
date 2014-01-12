@@ -118,10 +118,10 @@ void Canvas::BeginDraw(const Body* body, QPainter* painter) const {
     //painter->drawEllipse(body->toLocal(m_last_mouse_pos)*z,2,2);
 
 }
-void Canvas::Draw(const DynamicBody* body, QPainter* painter) const {
+void Canvas::Draw(const Body *body, QPainter* painter) const {
     qreal z = zoom();
-    qreal r = 10 * z;
-    painter->drawEllipse(body->position(),r,r);
+    qreal r = 10;// * z;
+    painter->drawEllipse(body->position()*z,r,r);
 }
 void Canvas::EndDraw(const Body* body, QPainter* painter) const {
     painter->restore();

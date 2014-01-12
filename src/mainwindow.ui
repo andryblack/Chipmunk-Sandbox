@@ -93,7 +93,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>76</width>
+           <width>77</width>
            <height>367</height>
           </rect>
          </property>
@@ -172,6 +172,7 @@
    <addaction name="actionUndo"/>
    <addaction name="actionRedo"/>
    <addaction name="separator"/>
+   <addaction name="actionTool_body"/>
    <addaction name="actionTool_edit"/>
    <addaction name="actionTool_box"/>
    <addaction name="actionTool_circle"/>
@@ -352,6 +353,18 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionTool_body">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../data/icons.qrc">
+     <normaloff>:/icons/car.png</normaloff>:/icons/car.png</iconset>
+   </property>
+   <property name="text">
+    <string>Body</string>
    </property>
   </action>
  </widget>

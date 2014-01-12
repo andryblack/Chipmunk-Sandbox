@@ -15,6 +15,7 @@ class Scene;
 class QSettings;
 class SceneTreeModel;
 class SceneSelectionModel;
+class SceneTreeItem;
 
 class MainWindow : public QMainWindow
 {
@@ -30,6 +31,7 @@ protected:
     void saveConfig(QSettings& config,const QString& name,const QObject* obj);
     void readConfig(QSettings& config,const QString& name,QObject* obj);
 protected slots:
+    void onSelectedByTree(SceneTreeItem* item);
     void onCanvasZoomChanged();
     void onHistoryChanged();
     void onToolChanged();

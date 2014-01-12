@@ -13,6 +13,7 @@ CircleTool::CircleTool(Scene *scene, QObject *parent) :
 
 
 void CircleTool::Draw(const Canvas* canvas,QPainter* painter) const {
+    if (!creating()) return;
     Body* b = scene()->activeBody();
     if (b)
         canvas->BeginDraw(b,painter);

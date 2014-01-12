@@ -9,6 +9,7 @@ enum ToolType {
     ToolTypeBox,
     ToolTypeCircle,
     ToolTypePolygon,
+    ToolTypeBody,
     ToolTypesAmount
 };
 
@@ -41,6 +42,7 @@ public slots:
     void activateCircleTool();
     void activatePolygonTool();
     void activateEditTool();
+    void activateBodyTool();
 private:
     Scene*    m_scene;
     ToolType    m_active_tool;

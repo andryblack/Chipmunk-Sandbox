@@ -81,6 +81,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionTool_circle,SIGNAL(triggered()),m_tools,SLOT(activateCircleTool()));
     m_tools_actions.push_back(ui->actionTool_polygon);
     connect(ui->actionTool_polygon,SIGNAL(triggered()),m_tools,SLOT(activatePolygonTool()));
+    m_tools_actions.push_back(ui->actionTool_body);
+    connect(ui->actionTool_body,SIGNAL(triggered()),m_tools,SLOT(activateBodyTool()));
 
     QActionGroup* group = new QActionGroup(this);
     foreach (QAction* a,m_tools_actions) {
@@ -95,10 +97,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->treeView->setModel(m_scene);
     m_scene_selection = new SceneSelectionModel(m_scene,this);
     ui->treeView->setSelectionModel(m_scene_selection);
-    connect(m_scene_selection,SIGNAL(selectByThree()),m_tools,SLOT(activateEditTool()));
+    connect(m_scene_selection,SIGNAL(selectByThree(SceneTreeItem*)),this,SLOT(onSelectedByTree(SceneTreeItem*)));
 
     connect(m_scene,SIGNAL(textChanged()),this,SLOT(onSceneTextChanged()));
     connect(m_scene,SIGNAL(changed()),this,SLOT(onSceneChanged()));
+    connect(m_scene,SIGNAL(selectionChanged()),this,SLOT(onSceneSelectionChanged()));
     connect(m_scene_selection,SIGNAL(selectionChanged(QItemSelection,QItemSelection)),this,SLOT(onSceneSelectionChanged()));
 
     QString lastFile = settings.value("lastFile").toString();
@@ -158,7 +161,16 @@ void MainWindow::readConfig(QSettings& settings,
          if (settings.contains(name))
              object->setProperty(name,settings.value(name));
       }
-    settings.endGroup();
+     settings.endGroup();
+}
+
+void MainWindow::onSelectedByTree(SceneTreeItem *item)
+{
+    if (qobject_cast<Body*>(item)) {
+        m_tools->activateBodyTool();
+    } else if (qobject_cast<Primitive*>(item)) {
+        m_tools->activateEditTool();
+    }
 }
 
 void MainWindow::changeEvent(QEvent *e)
@@ -249,6 +261,9 @@ void MainWindow::onToolChanged() {
             break;
         case ToolTypeEdit:
             activeTool = ui->actionTool_edit;
+            break;
+        case ToolTypeBody:
+            activeTool = ui->actionTool_body;
             break;
         default:
             break;

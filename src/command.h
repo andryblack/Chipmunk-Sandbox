@@ -11,7 +11,7 @@ class Command : public QObject
 public:
     explicit Command(QObject *parent = 0);
     
-    virtual void Execute(Scene* scene) = 0;
+    virtual void Execute(Scene* scene) { Redo(scene); }
     virtual void Undo(Scene* scene) = 0;
     virtual void Redo(Scene* scene) = 0;
 
